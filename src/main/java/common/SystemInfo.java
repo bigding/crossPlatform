@@ -1,5 +1,7 @@
 package common;
 
+import org.apache.log4j.Logger;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Date;
@@ -7,90 +9,65 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
+/**
+ * 查看系统信息,此类为单例模式
+ */
 
 public class SystemInfo {
+    /**单例定义*/
+    private static SystemInfo systemInfo = null;
+    /**log4j定义*/
+    private static Logger logger = Logger.getLogger(SystemInfo.class);
+
     /**系统名*/
-    private String os_name;
+    private String osName;
     /**系统架构*/
-    private String os_arch ;
+    private String osArch ;
     /**系统版本号*/
-    private String os_version ;
+    private String osVersion ;
     /**系统IP*/
-    private String os_ip ;
+    private String osIp ;
     /**系统MAC地址*/
-    private String os_mac;
+    private String osHac;
     /**系统时间*/
-    private Date os_date;
+    private Date osDate;
     /**系统CPU个数*/
-    private Integer os_cpus ;
+    private Integer osCpus ;
     /**系统用户名*/
-    private String os_user_name;
+    private String osUserName;
     /**用户的当前工作目录*/
-    private String os_user_dir;
+    private String osUserDir;
     /**用户的主目录*/
-    private String os_user_home;
+    private String osUserHome;
 
     /**Java的运行环境版本*/
-    private String java_version ;
+    private String javaVersion ;
     /**java默认的临时文件路径*/
-    private String java_io_tmpdir;
+    private String javaIoTmpdir;
 
     /**java 平台*/
-    private String sun_desktop ;
+    private String sunDesktop ;
 
     /**文件分隔符  在 unix 系统中是＂／＂*/
-    private String file_separator;
+    private String fileSeparator;
     /**路径分隔符  在 unix 系统中是＂:＂*/
-    private String path_separator;
+    private String pathSeparator;
     /**行分隔符   在 unix 系统中是＂/n＂*/
-    private String line_separator;
-
-    /**服务context**/
-    private String server_context ;
-    /**服务器名*/
-    private String server_name;
-    /**服务器端口*/
-    private Integer server_port;
-    /**服务器地址*/
-    private String server_addr;
-    /**获得客户端电脑的名字，若失败，则返回客户端电脑的ip地址*/
-    private String server_host;
-    /**服务协议*/
-    private String server_protocol;
-
-    public static SystemInfo SYSTEMINFO;
-
-    public static SystemInfo getInstance(){
-        if(SYSTEMINFO == null){
-            SYSTEMINFO = new SystemInfo();
-        }
-        return SYSTEMINFO;
-    }
-
-
-    public static SystemInfo getInstance(HttpServletRequest request){
-        if(SYSTEMINFO == null){
-            SYSTEMINFO = new SystemInfo(request);
-        }
-        else {
-            SYSTEMINFO.ServerInfo(request);
-        }
-        return SYSTEMINFO;
-    }
+    private String lineSeparator;
 
     private SystemInfo() {
-        super();
         init();
+        logger.info("创建系统信息成功");
     }
 
-    private SystemInfo(HttpServletRequest request) {
-        super();
-        init();
-        /**
-         * 额外信息 
-         */
-        ServerInfo(request);
+    public static SystemInfo getInstance(){
+        if(systemInfo == null){
+            systemInfo =  new SystemInfo();
+            return systemInfo;
+        }
+        else{
+            return systemInfo;
+        }
     }
 
     /**
@@ -117,29 +94,29 @@ public class SystemInfo {
     private void init(){
         Properties props=System.getProperties();
 
-        this.java_version = props.getProperty("java.version");
-        this.java_io_tmpdir = props.getProperty("java.io.tmpdir");
-        this.os_name = props.getProperty("os.name");
-        this.os_arch = props.getProperty("os.arch");
-        this.os_version = props.getProperty("os.version");
-        this.file_separator = props.getProperty("file.separator");
-        this.path_separator = props.getProperty("path.separator");
-        this.line_separator = props.getProperty("line.separator");
+        this.javaVersion = props.getProperty("java.version");
+        this.javaIoTmpdir = props.getProperty("java.io.tmpdir");
+        this.osName = props.getProperty("os.name");
+        this.osArch = props.getProperty("os.arch");
+        this.osVersion = props.getProperty("os.version");
+        this.fileSeparator = props.getProperty("file.separator");
+        this.pathSeparator = props.getProperty("path.separator");
+        this.lineSeparator = props.getProperty("line.separator");
 
-        this.os_user_name = props.getProperty("user.name");
-        this.os_user_home = props.getProperty("user.home");
-        this.os_user_dir = props.getProperty("user.dir");
+        this.osUserName = props.getProperty("user.name");
+        this.osUserHome = props.getProperty("user.home");
+        this.osUserDir = props.getProperty("user.dir");
 
-        this.sun_desktop = props.getProperty("sun.desktop");
+        this.sunDesktop = props.getProperty("sun.desktop");
 
-        this.os_date = new Date();
-        this.os_cpus = Runtime.getRuntime().availableProcessors();
+        this.osDate = new Date();
+        this.osCpus = Runtime.getRuntime().availableProcessors();
 
         try {
             ipMac();
         } catch (Exception e) {
-            this.os_ip = "";
-            this.os_mac = "";
+            this.osIp = "";
+            this.osHac = "";
         }
     }
 
@@ -161,110 +138,71 @@ public class SystemInfo {
                     (i < mac.length - 1) ? "-" : "").toString();
 
         }
-        SystemInfo.this.os_ip = sIP;
-        SystemInfo.this.os_mac = sMAC;
+        SystemInfo.this.osIp = sIP;
+        SystemInfo.this.osHac = sMAC;
     }
 
-    /**
-     * 获取服务器信息 
-     * @param request
-     */
-    public void ServerInfo(HttpServletRequest request){
-        this.server_name = request.getServerName();
-        this.server_port = request.getServerPort();
-        this.server_addr = request.getRemoteAddr();
-        this.server_host = request.getRemoteHost();
-        this.server_protocol = request.getProtocol();
-        this.server_context = request.getContextPath();
+    public String getOsName() {
+        return osName;
     }
 
-    public String getOs_name() {
-        return os_name;
+    public String getOsArch() {
+        return osArch;
     }
 
-    public String getOs_arch() {
-        return os_arch;
+    public String gOssVersion() {
+        return osVersion;
     }
 
-    public String gOss_version() {
-        return os_version;
+    public String getOsIp() {
+        return osIp;
     }
 
-    public String getOs_ip() {
-        return os_ip;
+    public String getOsHac() {
+        return osHac;
     }
 
-    public String getOs_mac() {
-        return os_mac;
+    public Date getOsDate() {
+        return osDate;
     }
 
-    public Date getOs_date() {
-        return os_date;
+    public Integer getOsCpus() {
+        return osCpus;
     }
 
-    public Integer getOs_cpus() {
-        return os_cpus;
+    public String getOsUserName() {
+        return osUserName;
     }
 
-    public String getOs_user_name() {
-        return os_user_name;
+    public String getOsUserDir() {
+        return osUserDir;
     }
 
-    public String getOs_user_dir() {
-        return os_user_dir;
+    public String getOsUserHome() {
+        return osUserHome;
     }
 
-    public String getOs_user_home() {
-        return os_user_home;
+    public String getJavaVersion() {
+        return javaVersion;
     }
 
-    public String getJava_version() {
-        return java_version;
+    public String getJavaIoTmpdir() {
+        return javaIoTmpdir;
     }
 
-    public String getJava_io_tmpdir() {
-        return java_io_tmpdir;
+    public String getSunDesktop() {
+        return sunDesktop;
     }
 
-    public String getSun_desktop() {
-        return sun_desktop;
+    public String getFileSeparator() {
+        return fileSeparator;
     }
 
-    public String getFile_separator() {
-        return file_separator;
+    public String getPathSeparator() {
+        return pathSeparator;
     }
 
-    public String getPath_separator() {
-        return path_separator;
+    public String getLineSeparator() {
+        return lineSeparator;
     }
-
-    public String getLine_separator() {
-        return line_separator;
-    }
-
-    public String getServer_context() {
-        return server_context;
-    }
-
-    public String getServer_name() {
-        return server_name;
-    }
-
-    public Integer getServer_port() {
-        return server_port;
-    }
-
-    public String getServer_addr() {
-        return server_addr;
-    }
-
-    public String getServer_host() {
-        return server_host;
-    }
-
-    public String getServer_protocol() {
-        return server_protocol;
-    }
-
-
 }  
