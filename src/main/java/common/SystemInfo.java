@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.Properties;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  * 查看系统信息,此类为单例模式
@@ -18,6 +20,8 @@ public class SystemInfo {
     private static SystemInfo systemInfo = null;
     /**log4j定义*/
     private static Logger logger = Logger.getLogger(SystemInfo.class);
+    /**获取屏幕信息需要的类*/
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
     /**系统名*/
     private String osName;
@@ -25,6 +29,10 @@ public class SystemInfo {
     private String osArch ;
     /**系统版本号*/
     private String osVersion ;
+    /**屏幕宽度*/
+    private int osScreenWidth;
+    /**屏幕高度*/
+    private int osScreenHeight;
     /**系统IP*/
     private String osIp ;
     /**系统MAC地址*/
@@ -86,6 +94,8 @@ public class SystemInfo {
         System.out.println("用户的账户名称："+props.getProperty("user.name"));
         System.out.println("用户的主目录："+props.getProperty("user.home"));
         System.out.println("用户的当前工作目录："+props.getProperty("user.dir"));
+        System.out.println("用户电脑屏幕宽度："+this.osScreenWidth);
+        System.out.println("用户电脑屏幕宽度："+this.osScreenHeight);
     }
 
     /**
@@ -102,6 +112,8 @@ public class SystemInfo {
         this.fileSeparator = props.getProperty("file.separator");
         this.pathSeparator = props.getProperty("path.separator");
         this.lineSeparator = props.getProperty("line.separator");
+        this.osScreenHeight = dim.height;
+        this.osScreenWidth = dim.width;
 
         this.osUserName = props.getProperty("user.name");
         this.osUserHome = props.getProperty("user.home");
@@ -204,5 +216,13 @@ public class SystemInfo {
 
     public String getLineSeparator() {
         return lineSeparator;
+    }
+
+    public int getOsScreenWidth() {
+        return osScreenWidth;
+    }
+
+    public int getOsSCreenHeight() {
+        return osScreenHeight;
     }
 }  
