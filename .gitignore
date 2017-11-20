@@ -1,2 +1,6 @@
 .idea/*
-.ida
+.idea
+target/*
+target
+src/test/test/*
+src/test/test
