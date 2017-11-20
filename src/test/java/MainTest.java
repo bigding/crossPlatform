@@ -1,3 +1,5 @@
+package java;
+
 import common.SystemInfo;
 
 public class MainTest {
