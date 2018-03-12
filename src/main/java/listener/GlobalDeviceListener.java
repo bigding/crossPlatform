@@ -17,7 +17,8 @@ import java.util.logging.Logger;
 
 public class GlobalDeviceListener implements NativeMouseInputListener, NativeKeyListener, NativeMouseWheelListener {
 
-    public  ActionContainer actionContainer = null;
+//    public  ActionContainer actionContainer = null;
+    public  ActionContainer actionContainer = new ActionContainer();
 
     public void nativeMouseClicked(NativeMouseEvent e) {
 //        System.out.println("Mouse Clicked: " + e.getClickCount());
@@ -56,12 +57,12 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseMoved(NativeMouseEvent e) {
-        System.out.println("Mouse Moved: " + e.getX() + ", " + e.getY());
+//        System.out.println("Mouse Moved: " + e.getX() + ", " + e.getY());
         JSONObject mouseMove = new JSONObject();
         mouseMove.put("id","4");
         mouseMove.put("posiX",e.getX());
         mouseMove.put("posiY",e.getY());
-        System.out.println(mouseMove);
+//        System.out.println(mouseMove);
         try {
             actionContainer.offer(mouseMove);
         } catch (InterruptedException e1) {
@@ -136,7 +137,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
 
     public void startGlobalListener() {
 //        actionContainer = ActionContainer.getActionContainer();
-        actionContainer = new ActionContainer();
+//        actionContainer = new ActionContainer();
 
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);

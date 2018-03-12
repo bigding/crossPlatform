@@ -11,14 +11,16 @@ public class ActionListener implements Runnable{
     }
     @Override
     public void run() {
-        if(!actionContainer.isEmpty()){
-            JSONObject action = null;
-            try {
-                action = actionContainer.poll();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        while(true) {
+            if (!actionContainer.isEmpty()) {
+                JSONObject action = null;
+                try {
+                    action = actionContainer.poll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Action:" + action);
             }
-            System.out.println(action);
         }
     }
 }
