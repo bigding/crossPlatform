@@ -8,6 +8,8 @@ public class Keyboard {
     public Keyboard() {
     }
 
+
+
     public Keyboard(int keyState, String keyNum) {
         this.keyState = keyState;
         this.keyNum = keyNum;
@@ -36,12 +38,13 @@ public class Keyboard {
     public void setKeyNum(String keyNum) {
         this.keyNum = keyNum;
     }
-
     @Override
     public String toString() {
         return "Keyboard{" +
-                "keyState=" + keyState +
+                "id=" + id +
+                ", keyState=" + keyState +
                 ", keyNum='" + keyNum + '\'' +
                 '}';
     }
+
 }

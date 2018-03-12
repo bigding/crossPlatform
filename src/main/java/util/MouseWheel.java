@@ -23,14 +23,16 @@ public class MouseWheel {
         return direction;
     }
 
+    @Override
+    public String toString() {
+        return "MouseWheel{" +
+                "id=" + id +
+                ", direction=" + direction +
+                '}';
+    }
+
     public void setDirection(int direction) {
         this.direction = direction;
     }
 
-    @Override
-    public String toString() {
-        return "MouseWheel{" +
-                "direction=" + direction +
-                '}';
-    }
 }

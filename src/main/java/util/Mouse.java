@@ -4,6 +4,7 @@ public class Mouse {
     int id = 1;// 标识符 1为鼠标对象
     int posiX, posiY;
 
+
     public Mouse() {
     }
 
@@ -41,8 +42,10 @@ public class Mouse {
     @Override
     public String toString() {
         return "Mouse{" +
-                "posiX=" + posiX +
+                "id=" + id +
+                ", posiX=" + posiX +
                 ", posiY=" + posiY +
                 '}';
     }
+
 }
