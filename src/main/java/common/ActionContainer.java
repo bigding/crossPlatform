@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.concurrent.LinkedBlockingDeque;
 
+/**
+ *  将所有的事件信息存在一个LinkedBlockingDeque 中
+ */
 public class ActionContainer {
 
     static LinkedBlockingDeque<JSONObject> queue = new LinkedBlockingDeque<>();

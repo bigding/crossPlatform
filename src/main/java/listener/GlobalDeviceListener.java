@@ -15,6 +15,10 @@ import org.jnativehook.mouse.NativeMouseWheelListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * github 的开源项目 kwhat/jnativehook
+ * 将上面项目中的四个监听器集中起来,并统一管理
+ */
 public class GlobalDeviceListener implements NativeMouseInputListener, NativeKeyListener, NativeMouseWheelListener {
 
 //    public  ActionContainer actionContainer = null;
@@ -137,6 +141,9 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         }
     }
 
+    /**
+     * 开启监听器
+     */
     public static void startGlobalListener() {
 //        actionContainer = ActionContainer.getActionContainer();
 //        actionContainer = new ActionContainer();
@@ -162,6 +169,10 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         GlobalScreen.addNativeKeyListener(globalDeviceListener);
         GlobalScreen.addNativeMouseWheelListener(globalDeviceListener);
     }
+
+    /**
+     * 关闭监听器
+     */
     public static void removeGlobalListener() {
         GlobalScreen.removeNativeMouseWheelListener(globalDeviceListener);
         GlobalScreen.removeNativeKeyListener(globalDeviceListener);

@@ -1,5 +1,8 @@
 package controller;
 
+/**
+ * 通过jni控制鼠标
+ */
 public class MouseMotion {
     public static native void up();
     public static native void down();
