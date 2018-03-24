@@ -21,7 +21,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     public  ActionContainer actionContainer = new ActionContainer();
 
     public void nativeMouseClicked(NativeMouseEvent e) {
-//        System.out.println("Mouse Clicked: " + e.getClickCount());
+//        System.out.println("MouseMove Clicked: " + e.getClickCount());
         JSONObject mouseClick = new JSONObject();
         mouseClick.put("id","1");
         mouseClick.put("clickCount",e.getClickCount());
@@ -33,7 +33,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMousePressed(NativeMouseEvent e) {
-//        System.out.println("Mouse Pressed: " + e.getButton());
+//        System.out.println("MouseMove Pressed: " + e.getButton());
         JSONObject mousePress = new JSONObject();
         mousePress.put("id","2");
         mousePress.put("press",e.getButton());
@@ -45,7 +45,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseReleased(NativeMouseEvent e) {
-//        System.out.println("Mouse Released: " + e.getButton());
+//        System.out.println("MouseMove Released: " + e.getButton());
         JSONObject mouseRelease = new JSONObject();
         mouseRelease.put("id","3");
         mouseRelease.put("release",e.getButton());
@@ -57,7 +57,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseMoved(NativeMouseEvent e) {
-//        System.out.println("Mouse Moved: " + e.getX() + ", " + e.getY());
+//        System.out.println("MouseMove Moved: " + e.getX() + ", " + e.getY());
         JSONObject mouseMove = new JSONObject();
         mouseMove.put("id","4");
         mouseMove.put("posiX",e.getX());
@@ -71,7 +71,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseDragged(NativeMouseEvent e) {
-//        System.out.println("Mouse Dragged: " + e.getX() + ", " + e.getY());
+//        System.out.println("MouseMove Dragged: " + e.getX() + ", " + e.getY());
         JSONObject mouseDrag = new JSONObject();
         mouseDrag.put("id","5");
         mouseDrag.put("posiX",e.getX());
@@ -84,7 +84,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseWheelMoved(NativeMouseWheelEvent e) {
-//        System.out.println("Mouse Wheel Moved: " + e.getWheelRotation());
+//        System.out.println("MouseMove Wheel Moved: " + e.getWheelRotation());
         JSONObject mouseWhellMove = new JSONObject();
         mouseWhellMove.put("id","6");
         mouseWhellMove.put("wheelRotation",e.getWheelRotation());
