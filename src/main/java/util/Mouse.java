@@ -1,8 +1,8 @@
-package controller;
+package util;
 
 import java.awt.*;
 
-public class MouseController {
+public class Mouse {
     PointerInfo pointerInfo = MouseInfo.getPointerInfo();
     Point point = pointerInfo.getLocation();
 
@@ -16,12 +16,5 @@ public class MouseController {
 
     public String getMousePosi(){
         return "x:"+getMouseX()+"\ty:"+getMouseY();
-    }
-
-    public static void main(String[] args) {
-        while (true){
-            MouseController mouse = new MouseController();
-            System.out.println(mouse.getMousePosi());
-        }
     }
 }
