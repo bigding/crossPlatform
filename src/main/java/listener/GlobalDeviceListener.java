@@ -19,6 +19,8 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
 
 //    public  ActionContainer actionContainer = null;
     public  ActionContainer actionContainer = new ActionContainer();
+    //注册全体监听器
+    static GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
 
     public void nativeMouseClicked(NativeMouseEvent e) {
 //        System.out.println("MouseMove Clicked: " + e.getClickCount());
@@ -135,7 +137,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         }
     }
 
-    public void startGlobalListener() {
+    public static void startGlobalListener() {
 //        actionContainer = ActionContainer.getActionContainer();
 //        actionContainer = new ActionContainer();
 
@@ -153,12 +155,17 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         }
 
         // Construct the example object.
-        GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
 
         // Add the appropriate listeners.
         GlobalScreen.addNativeMouseListener(globalDeviceListener);
         GlobalScreen.addNativeMouseMotionListener(globalDeviceListener);
         GlobalScreen.addNativeKeyListener(globalDeviceListener);
         GlobalScreen.addNativeMouseWheelListener(globalDeviceListener);
+    }
+    public static void removeGlobalListener() {
+        GlobalScreen.removeNativeMouseWheelListener(globalDeviceListener);
+        GlobalScreen.removeNativeKeyListener(globalDeviceListener);
+        GlobalScreen.removeNativeMouseMotionListener(globalDeviceListener);
+        GlobalScreen.removeNativeMouseListener(globalDeviceListener);
     }
 }
