@@ -9,10 +9,31 @@ import java.awt.event.KeyEvent;
  */
 public class Key {
 
-    public static final int VK_SLEEP = 0x5F;    //Computer Sleep key
-    public static final int VK_SELECT = 0x29;    //SELECT key
+    public static final int VK_SLEEP = 0x5F;
+    public static final int VK_SELECT = 0x29;
+    public static final int VK_MEDIA_PREV_TRACK = 0xB1;
+    public static final int VK_MEDIA_NEXT_TRACK = 0xB0;
+    public static final int VK_VOLUME_MUTE = 0xAD;
+    public static final int VK_PLAY = 0xFA;
+    public static final int VK_VOLUME_DOWN = 0xAE;
+    public static final int VK_VOLUME_UP = 0xAF;
+    public static final int VK_BROWSER_HOME = 0xAC;
+    public static final int VK_BROWSER_SEARCH = 0xAA;
+    public static final int VK_BROWSER_FAVORITES = 0xAB;
+    public static final int VK_BROWSER_REFRESH = 0xA8;
+    public static final int VK_BROWSER_FORWARD = 0xA7;
+    public static final int VK_BROWSER_BACK = 0xA6;
+    public static final int VK_LAUNCH_MAIL = 0xB4;
 
-    public static Object getKeyText(int var0) {
+    /**
+     * 在KeyEvent中存在值  那就直接返回对应值
+     * 如果KeyEvent不存在,那就自己定义手册中值返回
+     * 如果手册中没有值,那就返回-1
+     * 在程序体中对 -1 这种情况特殊处理
+     * @param var0
+     * @return
+     */
+    public static int getKeyText(int var0) {
         switch(var0) {
             case 0:
                 return KeyEvent.CHAR_UNDEFINED;
@@ -153,7 +174,8 @@ public class Key {
             case 70:
                 return KeyEvent.VK_SCROLL_LOCK;
             case 83:
-                return Toolkit.getProperty("AWT.separator", "NumPad ,");
+//                return Toolkit.getProperty("AWT.separator", "NumPad ,");
+                return -1;
             case 87:
                 return KeyEvent.VK_F11;
             case 88:
@@ -187,13 +209,15 @@ public class Key {
             case 115:
                 return KeyEvent.VK_UNDERSCORE;
             case 119:
-                return Toolkit.getProperty("AWT.furigana", "Furigana");
+//                return Toolkit.getProperty("AWT.furigana", "Furigana");
+                return -1;
             case 121:
                 return KeyEvent.VK_KANJI;
             case 123:
                 return KeyEvent.VK_HIRAGANA;
             case 125:
-                return Toolkit.getProperty("AWT.yen", Character.toString('¥'));
+//                return Toolkit.getProperty("AWT.yen", Character.toString('¥'));
+                return -1;
             case 3639:
                 return KeyEvent.VK_COMMA;
             case 3653:
@@ -215,27 +239,37 @@ public class Key {
             case 3677:
                 return KeyEvent.VK_CONTEXT_MENU;
             case 57360:
-                return Toolkit.getProperty("AWT.previous", "Previous");
+//                return Toolkit.getProperty("AWT.previous", "Previous");
+                return VK_MEDIA_PREV_TRACK;
             case 57369:
-                return Toolkit.getProperty("AWT.next", "Next");
+//                return Toolkit.getProperty("AWT.next", "Next");
+                return VK_MEDIA_NEXT_TRACK;
             case 57376:
-                return Toolkit.getProperty("AWT.mute", "Mute");
+//                return Toolkit.getProperty("AWT.mute", "Mute");
+                return VK_VOLUME_MUTE;
             case 57377:
-                return Toolkit.getProperty("AWT.app_calculator", "App Calculator");
+//                return Toolkit.getProperty("AWT.app_calculator", "App Calculator");
+                return -1;
             case 57378:
-                return Toolkit.getProperty("AWT.play", "Play");
+//                return Toolkit.getProperty("AWT.play", "Play");
+                return VK_PLAY;
             case 57380:
                 return KeyEvent.VK_STOP;
             case 57388:
-                return Toolkit.getProperty("AWT.eject", "Eject");
+//                return Toolkit.getProperty("AWT.eject", "Eject");
+                return -1;
             case 57390:
-                return Toolkit.getProperty("AWT.voldn", "Volume Down");
+//                return Toolkit.getProperty("AWT.voldn", "Volume Down");
+                return VK_VOLUME_DOWN;
             case 57392:
-                return Toolkit.getProperty("AWT.volup", "Volume Up");
+//                return Toolkit.getProperty("AWT.volup", "Volume Up");
+                return VK_VOLUME_UP;
             case 57394:
-                return Toolkit.getProperty("AWT.homepage", "Browser Home");
+//                return Toolkit.getProperty("AWT.homepage", "Browser Home");
+                return VK_BROWSER_HOME;
             case 57404:
-                return Toolkit.getProperty("AWT.app_music", "App Music");
+//                return Toolkit.getProperty("AWT.app_music", "App Music");
+                return -1;
             case 57416:
                 return KeyEvent.VK_UP;
             case 57419:
@@ -247,51 +281,71 @@ public class Key {
             case 57424:
                 return KeyEvent.VK_DOWN;
             case 57438:
-                return Toolkit.getProperty("AWT.power", "Power");
+//                return Toolkit.getProperty("AWT.power", "Power");
+                return -1;
             case 57439:
                 return VK_SLEEP;
             case 57443:
-                return Toolkit.getProperty("AWT.wake", "Wake");
+//                return Toolkit.getProperty("AWT.wake", "Wake");
+                return -1;
             case 57444:
-                return Toolkit.getProperty("AWT.app_pictures", "App Pictures");
+//                return Toolkit.getProperty("AWT.app_pictures", "App Pictures");
+                return -1;
             case 57445:
-                return Toolkit.getProperty("AWT.search", "Browser Search");
+//                return Toolkit.getProperty("AWT.search", "Browser Search");
+                return VK_BROWSER_SEARCH;
             case 57446:
-                return Toolkit.getProperty("AWT.favorites", "Browser Favorites");
+//                return Toolkit.getProperty("AWT.favorites", "Browser Favorites");
+                return VK_BROWSER_FAVORITES;
             case 57447:
-                return Toolkit.getProperty("AWT.refresh", "Browser Refresh");
+//                return Toolkit.getProperty("AWT.refresh", "Browser Refresh");
+                return VK_BROWSER_REFRESH;
             case 57448:
                 return KeyEvent.VK_STOP;
             case 57449:
-                return Toolkit.getProperty("AWT.forward", "Browser Forward");
+//                return Toolkit.getProperty("AWT.forward", "Browser Forward");
+                return VK_BROWSER_FORWARD;
             case 57450:
-                return Toolkit.getProperty("AWT.back", "Browser Back");
+//                return Toolkit.getProperty("AWT.back", "Browser Back");
+                return VK_BROWSER_BACK;
             case 57452:
-                return Toolkit.getProperty("AWT.app_mail", "App Mail");
+//                return Toolkit.getProperty("AWT.app_mail", "App Mail");
+                return VK_LAUNCH_MAIL;
             case 57453:
                 return VK_SELECT;
             case 65396:
-                return Toolkit.getProperty("AWT.sun_open", "Sun Open");
+//                return Toolkit.getProperty("AWT.sun_open", "Sun Open");
+                return -1;
             case 65397:
-                return Toolkit.getProperty("AWT.sun_help", "Sun Help");
+//                return Toolkit.getProperty("AWT.sun_help", "Sun Help");
+                return -1;
             case 65398:
-                return Toolkit.getProperty("AWT.sun_props", "Sun Props");
+//                return Toolkit.getProperty("AWT.sun_props", "Sun Props");
+                return -1;
             case 65399:
-                return Toolkit.getProperty("AWT.sun_front", "Sun Front");
+//                return Toolkit.getProperty("AWT.sun_front", "Sun Front");
+                return -1;
             case 65400:
-                return Toolkit.getProperty("AWT.sun_stop", "Sun Stop");
+//                return Toolkit.getProperty("AWT.sun_stop", "Sun Stop");
+                return -1;
             case 65401:
-                return Toolkit.getProperty("AWT.sun_again", "Sun Again");
+//                return Toolkit.getProperty("AWT.sun_again", "Sun Again");
+                return -1;
             case 65403:
-                return Toolkit.getProperty("AWT.sun_cut", "Sun Cut");
+//                return Toolkit.getProperty("AWT.sun_cut", "Sun Cut");
+                return -1;
             case 65404:
-                return Toolkit.getProperty("AWT.sun_copy", "Sun Copy");
+//                return Toolkit.getProperty("AWT.sun_copy", "Sun Copy");
+                return -1;
             case 65405:
-                return Toolkit.getProperty("AWT.sun_insert", "Sun Insert");
+//                return Toolkit.getProperty("AWT.sun_insert", "Sun Insert");
+                return -1;
             case 65406:
-                return Toolkit.getProperty("AWT.sun_find", "Sun Find");
+//                return Toolkit.getProperty("AWT.sun_find", "Sun Find");
+                return -1;
             default:
-                return Toolkit.getProperty("AWT.unknown", "Unknown") + " keyCode: 0x" + Integer.toString(var0, 16);
+//                return Toolkit.getProperty("AWT.unknown", "Unknown") + " keyCode: 0x" + Integer.toString(var0, 16);
+                return -1;
         }
     }
 }
