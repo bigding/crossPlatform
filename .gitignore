@@ -1,7 +1,7 @@
 .idea/*
 .idea
+target/
 target/*
-target
 src/test/test/*
 src/test/test
 src/test/test.iml
