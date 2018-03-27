@@ -8,6 +8,6 @@ public class KeyboardMotion {
     public static native void keyUp(int key);
 
     static {
-        System.loadLibrary("KeyboardMotion");
+        System.loadLibrary("lib/KeyboardMotion");
     }
 }

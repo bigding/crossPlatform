@@ -19,6 +19,6 @@ public class MouseMotion {
     public static native void wheelRotate(int distance);
 
     static {
-        System.loadLibrary("MouseMotion");
+        System.loadLibrary("lib/MouseMotion");
     }
 }

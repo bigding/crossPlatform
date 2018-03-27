@@ -11,6 +11,7 @@ import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 import org.jnativehook.mouse.NativeMouseWheelEvent;
 import org.jnativehook.mouse.NativeMouseWheelListener;
+import util.Key;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,41 +104,50 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
 
     public void nativeKeyPressed(NativeKeyEvent e) {
 //        System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
-        JSONObject keyPress = new JSONObject();
-        keyPress.put("id","7");
-        keyPress.put("keyText",NativeKeyEvent.getKeyText(e.getKeyCode()));
-        keyPress.put("keyCode",e.getKeyCode());
-        try {
-            actionContainer.offer(keyPress);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
+        int keyCode = Key.getKeyText(e.getKeyCode());
+        if(keyCode != -1) {
+            JSONObject keyPress = new JSONObject();
+            keyPress.put("id", "7");
+            keyPress.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
+            keyPress.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+            try {
+                actionContainer.offer(keyPress);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
 
     public void nativeKeyReleased(NativeKeyEvent e) {
 //        System.out.println("Key Released: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
-        JSONObject keyRelease = new JSONObject();
-        keyRelease.put("id","8");
-        keyRelease.put("keyText",NativeKeyEvent.getKeyText(e.getKeyCode()));
-        keyRelease.put("keyCode",e.getKeyCode());
-        try {
-            actionContainer.offer(keyRelease);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
+        int keyCode = Key.getKeyText(e.getKeyCode());
+        if(keyCode != -1) {
+            JSONObject keyRelease = new JSONObject();
+            keyRelease.put("id", "8");
+            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
+            keyRelease.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+            try {
+                actionContainer.offer(keyRelease);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
     public void nativeKeyTyped(NativeKeyEvent e) {
 //        System.out.println("Key Typed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
-        JSONObject keyType = new JSONObject();
-        keyType.put("id","9");
-        keyType.put("keyText",NativeKeyEvent.getKeyText(e.getKeyCode()));
-        keyType.put("keyCode",e.getKeyCode());
-        try {
-            actionContainer.offer(keyType);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
+        int keyCode = Key.getKeyText(e.getKeyCode());
+        if(keyCode != -1) {
+            JSONObject keyType = new JSONObject();
+            keyType.put("id", "9");
+            keyType.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
+            keyType.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+            try {
+                actionContainer.offer(keyType);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 

@@ -5,7 +5,7 @@ public class HelloWorld {
 
     }
     static {
-        System.loadLibrary("HelloWorld");
+        System.loadLibrary("lib/HelloWorld");
     }
 
     public static void main(String[] args) {
