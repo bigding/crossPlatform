@@ -37,14 +37,4 @@ public class Client {
             client.close();
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            new Client();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

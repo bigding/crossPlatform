@@ -18,13 +18,4 @@ public class Server {
             serverThread.start();
         }
     }
-
-    public static void main(String[] args) {
-        try {
-            new Server();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
 }
