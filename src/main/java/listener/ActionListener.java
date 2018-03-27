@@ -2,11 +2,13 @@ package listener;
 
 import com.alibaba.fastjson.JSONObject;
 import common.ActionContainer;
+import org.apache.log4j.Logger;
 
 /**
  * 将LinkedBlockingDeque 中存的信息取出来,以备后续使用
  */
 public class ActionListener implements Runnable{
+    private static Logger logger = Logger.getLogger(ActionListener.class);
     ActionContainer actionContainer = new ActionContainer();
 //    ActionContainer actionContainer = ActionContainer.getActionContainer();
     public ActionListener() throws InterruptedException {
@@ -22,7 +24,7 @@ public class ActionListener implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Action:" + action);
+                logger.info("Action:" + action);
             }
         }
     }
