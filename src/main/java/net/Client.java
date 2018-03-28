@@ -1,5 +1,6 @@
 package net;
 
+import common.ActionContainer;
 import org.apache.log4j.Logger;
 
 import javax.swing.event.CaretListener;
@@ -45,7 +46,8 @@ public class Client {
         return client;
     }
 
-    public void startClient(){
+    public void startClient(ActionContainer clientActionContainer){
+        //初始化动作容器
         handler();
     }
     public void stopClient(){

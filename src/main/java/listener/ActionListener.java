@@ -24,7 +24,7 @@ public class ActionListener implements Runnable{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                logger.info("Action:" + action);
+                logger.info("Action :" + action);
             }
         }
     }

@@ -22,10 +22,14 @@ import java.util.logging.Logger;
  */
 public class GlobalDeviceListener implements NativeMouseInputListener, NativeKeyListener, NativeMouseWheelListener {
 
-//    public  ActionContainer actionContainer = null;
-    public  ActionContainer actionContainer = new ActionContainer();
+    public  ActionContainer actionContainer = null;
+//    public  ActionContainer actionContainer = new ActionContainer();
     //注册全体监听器
     static GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
+
+    public void setActionContainer(ActionContainer actionContainer){
+        this.actionContainer = actionContainer;
+    }
 
     public void nativeMouseClicked(NativeMouseEvent e) {
 //        System.out.println("MouseMove Clicked: " + e.getClickCount());

@@ -1,5 +1,7 @@
 package net;
 
+import com.alibaba.fastjson.JSONObject;
+import common.ActionContainer;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -43,8 +45,8 @@ public class Server  {
         return server;
     }
 
-    public void startServer(){
-        init();
+    public void startServer(ActionContainer serverActionContainer){
+        init(serverActionContainer);
     }
     public void stopServer(){
         try {
@@ -56,13 +58,7 @@ public class Server  {
         serverReadThread.interrupt();
     }
 
-//    public static void main(String[] args) {
-//        System.out.println("sever begins");
-//        Server server = new Server();
-//        server.init();
-//    }
-
-    public void init() {
+    public void init(ActionContainer serverActionContainer) {
         try {
             serverSocket = new ServerSocket(port);
             while (true) {
@@ -70,7 +66,7 @@ public class Server  {
                 //一个客户端连接就开两个线程分别处理读和写
                 logger.info("server listen to port "+port);
                 serverReadThread = new Thread(new ServerReadHandlerThread(client));
-                serverWriteThread = new Thread(new ServerWriteHandlerThread(client));
+                serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));
                 serverReadThread.start();
                 serverWriteThread.start();
             }
@@ -130,10 +126,15 @@ class ServerReadHandlerThread implements Runnable{
  * 处理写操作的线程
  */
 class ServerWriteHandlerThread implements Runnable{
-    private Socket client;
+    private static Logger logger = Logger.getLogger(ServerWriteHandlerThread.class);
 
-    public ServerWriteHandlerThread(Socket client) {
+
+    private Socket client;
+    ActionContainer serverActionContainer;
+
+    public ServerWriteHandlerThread(Socket client, ActionContainer serverActionContainer) {
         this.client = client;
+        this.serverActionContainer = serverActionContainer;
     }
 
     @Override
@@ -145,12 +146,21 @@ class ServerWriteHandlerThread implements Runnable{
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));//从控制台获取输入的内容
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));//从控制台获取输入的内容
         try{
             while(true){
-                //向客户端回复信息
-                out.println(reader.readLine());
-                out.flush();
+                //向客户端发送信息  actionContainer 内容为键盘鼠标的动作信息
+                if (!serverActionContainer.isEmpty()) {
+                    JSONObject action = null;
+                    try {
+                        action = serverActionContainer.poll();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+//                    logger.info("Action:" + action);
+                    out.println(action);
+                    out.flush();
+                }
             }
         }catch(Exception e){
             e.printStackTrace();

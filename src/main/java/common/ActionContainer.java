@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class ActionContainer {
 
-    static LinkedBlockingDeque<JSONObject> queue = new LinkedBlockingDeque<>();
+    LinkedBlockingDeque<JSONObject> queue = new LinkedBlockingDeque<>();
 
 
     public synchronized void offer(JSONObject obj) throws InterruptedException {
