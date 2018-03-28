@@ -2,8 +2,8 @@
 .idea
 target/*
 target/
-log/*
-log/
+logs/*
+logs/
 src/test/test/*
 src/test/test
 src/test/test.iml
