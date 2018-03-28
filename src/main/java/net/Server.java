@@ -9,30 +9,74 @@ import java.net.Socket;
 public class Server  {
     private static Logger logger = Logger.getLogger(Client.class);
 
-    public static final int PORT = 10000;//监听的端口号
+    public static int port = 10000;//监听的端口号
 
     Thread serverReadThread,serverWriteThread;
     ServerSocket serverSocket = null;
+    static volatile Server server = null;
 
-    public static void main(String[] args) {
-        System.out.println("sever begins");
-        Server server = new Server();
-        server.init();
+    private Server(){
+
     }
+    private Server(int port){
+        this.port = port;
+    }
+
+    public static Server getServer(){
+        if(server == null){
+            synchronized (Client.class){
+                if(server == null){
+                    server = new Server();
+                }
+            }
+        }
+        return server;
+    }
+    public static Server getServer(int port){
+        if(server == null){
+            synchronized (Client.class){
+                if(server == null){
+                    server = new Server(port);
+                }
+            }
+        }
+        return server;
+    }
+
+    public void startServer(){
+        init();
+    }
+    public void stopServer(){
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        serverWriteThread.interrupt();
+        serverReadThread.interrupt();
+    }
+
+//    public static void main(String[] args) {
+//        System.out.println("sever begins");
+//        Server server = new Server();
+//        server.init();
+//    }
 
     public void init() {
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(port);
             while (true) {
                 Socket client = serverSocket.accept();
                 //一个客户端连接就开两个线程分别处理读和写
+                logger.info("server listen to port "+port);
                 serverReadThread = new Thread(new ServerReadHandlerThread(client));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client));
                 serverReadThread.start();
                 serverWriteThread.start();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            logger.error("listen to port fail.");
         } finally{
             try {
                 if(serverSocket != null){
@@ -63,14 +107,16 @@ class ServerReadHandlerThread implements Runnable{
                 //读取客户端数据
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 String say = in.readLine();
+                System.out.println("H:"+say);
                 if("bye".equals(say.toLowerCase())){
+                    Server.getServer().stopServer();
                     break;
                 }
                 System.out.println("客户端说:" + say);
             }
         }catch(Exception e){
-//            e.printStackTrace();
-            System.out.println("连接出现了问题==");
+            e.printStackTrace();
+//            System.out.println("连接出现了问题");
         }finally{
             if(client != null){
                 client = null;

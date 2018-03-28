@@ -2,35 +2,74 @@ package net;
 
 import org.apache.log4j.Logger;
 
+import javax.swing.event.CaretListener;
 import java.io.*;
 import java.net.Socket;
 
 public class Client {
     private static Logger logger = Logger.getLogger(Client.class);
 
-    public static final String IP = "localhost";//服务器地址
-    public static final int PORT = 10000;//服务器端口号
+    public static  String ip = "localhost";//服务器地址
+    public static  int port = 10000;//服务器端口号
 
     Thread clientReadThread,clientWriteThread;
     Socket clientSocket;
+    static volatile Client client = null;
 
-    public static void main(String[] args) {
-        Client  client = new Client();
-        client.handler();
+    private Client(){
+
+    }
+    private Client(String ip, int port){
+        this.ip = ip;
+        this.port = port;
+    }
+    public static Client getClient(){
+        if(client == null){
+            synchronized (Client.class){
+                if(client == null){
+                    client = new Client();
+                }
+            }
+        }
+        return client;
     }
 
+    public static Client getClient(String ip, int port){
+        if(client == null){
+            synchronized (Client.class){
+                if(client == null){
+                    client = new Client(ip,port);
+                }
+            }
+        }
+        return client;
+    }
+
+    public void startClient(){
+        handler();
+    }
+    public void stopClient(){
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        clientReadThread.interrupt();
+        clientWriteThread.interrupt();
+    }
     private  void handler(){
         try {
             //实例化一个Socket，并指定服务器地址和端口
-            clientSocket = new Socket(IP, PORT);
-            System.out.println("I am a client");
+            clientSocket = new Socket(ip, port);
+            logger.info("connected to"+ip+"\t"+port);
             //开启两个线程，一个负责读，一个负责写
             clientReadThread = new  Thread(new ClientReadHandlerThread(clientSocket));
             clientWriteThread = new Thread(new ClientWriteHandlerThread(clientSocket));
-            clientReadThread.start();
             clientWriteThread.start();
+            clientReadThread.start();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            logger.error("connect to server fail.");
         }
     }
     private void closeClient(){
@@ -39,8 +78,8 @@ public class Client {
         try {
             clientSocket.close();
         } catch (IOException e) {
-            System.out.println("关闭客户端套接字出错");
-            e.printStackTrace();
+            logger.error("close client socket fail");
+//            e.printStackTrace();
         }
     }
 }
@@ -96,9 +135,10 @@ class ClientWriteHandlerThread implements Runnable{
         try {
             while(true){
                 String read = reader.readLine();
-                out.println();
+                out.println(read);
                 out.flush();
                 if("bye".equals(read.toLowerCase())){
+                    Client.getClient().stopClient();
                     break;
                 }
             }
