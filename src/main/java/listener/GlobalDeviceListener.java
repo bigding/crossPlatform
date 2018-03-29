@@ -24,70 +24,61 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
 
     private static org.apache.log4j.Logger log4j = org.apache.log4j.Logger.getLogger(GlobalDeviceListener.class);
 
-    public  ActionContainer actionContainer;
+    public static  ActionContainer actionContainer;
 //    public  ActionContainer actionContainer = new ActionContainer();
     //注册全体监听器
     static GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
 
     public void setActionContainer(ActionContainer actionContainer){
         this.actionContainer = actionContainer;
-        System.out.println("actionContainer:"+this.actionContainer);
     }
 
     public void nativeMouseClicked(NativeMouseEvent e) {
-//        System.out.println("MouseMove Clicked: " + e.getClickCount());
         JSONObject mouseClick = new JSONObject();
         mouseClick.put("id","1");
         mouseClick.put("clickCount",e.getClickCount());
         try {
             this.actionContainer.offer(mouseClick);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+            log4j.error("add mouseChecked event to eventContainer fail");
         }
     }
 
     public void nativeMousePressed(NativeMouseEvent e) {
-//        System.out.println("MouseMove Pressed: " + e.getButton());
         JSONObject mousePress = new JSONObject();
         mousePress.put("id","2");
         mousePress.put("press",e.getButton());
         try {
             this.actionContainer.offer(mousePress);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+            log4j.error("add mousePressed event to eventContainer fail");
         }
     }
 
     public void nativeMouseReleased(NativeMouseEvent e) {
-//        System.out.println("MouseMove Released: " + e.getButton());
         JSONObject mouseRelease = new JSONObject();
         mouseRelease.put("id","3");
         mouseRelease.put("release",e.getButton());
         try {
             this.actionContainer.offer(mouseRelease);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+            log4j.error("add mouseReleased event to eventContainer fail");
         }
     }
 
     public void nativeMouseMoved(NativeMouseEvent e) {
-//        System.out.println("MouseMove Moved: " + e.getX() + ", " + e.getY());
         JSONObject mouseMove = new JSONObject();
         mouseMove.put("id","4");
         mouseMove.put("posiX",e.getX());
         mouseMove.put("posiY",e.getY());
         try {
-            System.out.println(mouseMove);
-            System.out.println("action:"+this.actionContainer);
             this.actionContainer.offer(mouseMove);
         } catch (InterruptedException e1) {
-//            e1.printStackTrace();
-            log4j.error("add mouseMove event to eventContainer fail");
+            log4j.error("add mouseMoved event to eventContainer fail");
         }
     }
 
     public void nativeMouseDragged(NativeMouseEvent e) {
-//        System.out.println("MouseMove Dragged: " + e.getX() + ", " + e.getY());
         JSONObject mouseDrag = new JSONObject();
         mouseDrag.put("id","5");
         mouseDrag.put("posiX",e.getX());
@@ -95,24 +86,22 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         try {
             this.actionContainer.offer(mouseDrag);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+            log4j.error("add mouseDragged event to eventContainer fail");
         }
     }
 
     public void nativeMouseWheelMoved(NativeMouseWheelEvent e) {
-//        System.out.println("MouseMove Wheel Moved: " + e.getWheelRotation());
         JSONObject mouseWhellMove = new JSONObject();
         mouseWhellMove.put("id","6");
         mouseWhellMove.put("wheelRotation",e.getWheelRotation());
         try {
             this.actionContainer.offer(mouseWhellMove);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+            log4j.error("add mouseWheelMoved event to eventContainer fail");
         }
     }
 
     public void nativeKeyPressed(NativeKeyEvent e) {
-//        System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
         int keyCode = Key.getKeyText(e.getKeyCode());
         if(keyCode != -1) {
             JSONObject keyPress = new JSONObject();
@@ -122,14 +111,13 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
             try {
                 this.actionContainer.offer(keyPress);
             } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                log4j.error("add keyPressed event to eventContainer fail");
             }
         }
     }
 
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-//        System.out.println("Key Released: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
         int keyCode = Key.getKeyText(e.getKeyCode());
         if(keyCode != -1) {
             JSONObject keyRelease = new JSONObject();
@@ -139,13 +127,12 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
             try {
                 this.actionContainer.offer(keyRelease);
             } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                log4j.error("add keyReleased event to eventContainer fail");
             }
         }
     }
 
     public void nativeKeyTyped(NativeKeyEvent e) {
-//        System.out.println("Key Typed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
         int keyCode = Key.getKeyText(e.getKeyCode());
         if(keyCode != -1) {
             JSONObject keyType = new JSONObject();
@@ -155,7 +142,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
             try {
                 this.actionContainer.offer(keyType);
             } catch (InterruptedException e1) {
-                e1.printStackTrace();
+                log4j.error("add keyTyped event to eventContainer fail");
             }
         }
     }
@@ -164,26 +151,20 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
      * 开启监听器
      */
     public void startGlobalListener() {
-//        actionContainer = ActionContainer.getActionContainer();
-//        actionContainer = new ActionContainer();
 
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);
         logger.setUseParentHandlers(false);
 
-        System.out.println("start:"+this.actionContainer);
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
-            System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
+            log4j.error("There was a problem registering the native hook.");
+            log4j.error(ex.getMessage());
 
             System.exit(1);
         }
 
-        // Construct the example object.
-
-        // Add the appropriate listeners.
         GlobalScreen.addNativeMouseListener(globalDeviceListener);
         GlobalScreen.addNativeMouseMotionListener(globalDeviceListener);
         GlobalScreen.addNativeKeyListener(globalDeviceListener);

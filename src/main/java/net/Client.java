@@ -8,8 +8,9 @@ import java.io.*;
 import java.net.Socket;
 
 public class Client {
-    private static Logger logger = Logger.getLogger(Client.class);
+    private static Logger log4j = Logger.getLogger(Client.class);
 
+    // 如果构造函数没有定义ip和port 那么默认使用下面的值
     public static  String ip = "localhost";//服务器地址
     public static  int port = 10000;//服务器端口号
 
@@ -63,7 +64,7 @@ public class Client {
         try {
             //实例化一个Socket，并指定服务器地址和端口
             clientSocket = new Socket(ip, port);
-            logger.info("connected to"+ip+"\t"+port);
+            log4j.info("client connected to "+ip+"\t"+port);
             //开启两个线程，一个负责读，一个负责写
             clientReadThread = new  Thread(new ClientReadHandlerThread(clientSocket));
             clientWriteThread = new Thread(new ClientWriteHandlerThread(clientSocket));
@@ -71,7 +72,7 @@ public class Client {
             clientReadThread.start();
         } catch (Exception e) {
 //            e.printStackTrace();
-            logger.error("connect to server fail.");
+            log4j.error("connect to server fail.");
         }
     }
     private void closeClient(){
@@ -80,7 +81,7 @@ public class Client {
         try {
             clientSocket.close();
         } catch (IOException e) {
-            logger.error("close client socket fail");
+            log4j.error("close client socket fail");
 //            e.printStackTrace();
         }
     }
@@ -90,6 +91,8 @@ public class Client {
  *处理读操作的线程
  */
 class ClientReadHandlerThread implements Runnable{
+    private static Logger log4j = Logger.getLogger(ClientReadHandlerThread.class);
+
     private Socket client;
 
     public ClientReadHandlerThread(Socket client) {
@@ -100,12 +103,13 @@ class ClientReadHandlerThread implements Runnable{
         BufferedReader in = null;
         try {
             while(true){
-                //读取客户端数据
+                //读取服务器端传来的数据
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                System.out.println("服务器端说:" + in.readLine());
+                log4j.info("server: " + in.readLine());
             }
         } catch (IOException e) {
             e.printStackTrace();
+            log4j.error("read data from server fail.");
         } finally{
             if(client != null){
                 client = null;
@@ -116,8 +120,10 @@ class ClientReadHandlerThread implements Runnable{
 
 /*
  * 处理写操作的线程
+ * 这里的输入是通过标准控制台输入的
  */
 class ClientWriteHandlerThread implements Runnable{
+    private static Logger log4j = Logger.getLogger(ClientWriteHandlerThread.class);
     private Socket client;
 
     public ClientWriteHandlerThread(Socket client) {

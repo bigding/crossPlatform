@@ -9,8 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
-    private static Logger logger = Logger.getLogger(Client.class);
+    private static Logger log4j = Logger.getLogger(Client.class);
 
+    //如果构造函数没有定义port  那么默认使用下面的值
     public static int port = 10000;//监听的端口号
 
     Thread serverReadThread,serverWriteThread;
@@ -67,7 +68,7 @@ public class Server extends Thread {
             while (true) {
                 Socket client = serverSocket.accept();
                 //一个客户端连接就开两个线程分别处理读和写
-                logger.info("server listen to port "+port);
+                log4j.info("server listen to port "+port);
                 serverReadThread = new Thread(new ServerReadHandlerThread(client));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));
                 serverReadThread.start();
@@ -75,7 +76,7 @@ public class Server extends Thread {
             }
         } catch (Exception e) {
 //            e.printStackTrace();
-            logger.error("listen to port fail.");
+            log4j.error("listen to port fail.");
         } finally{
             try {
                 if(serverSocket != null){
@@ -129,7 +130,7 @@ class ServerReadHandlerThread implements Runnable{
  * 处理写操作的线程
  */
 class ServerWriteHandlerThread implements Runnable{
-    private static Logger logger = Logger.getLogger(ServerWriteHandlerThread.class);
+    private static Logger log4j = Logger.getLogger(ServerWriteHandlerThread.class);
 
 
     private Socket client;
@@ -160,7 +161,7 @@ class ServerWriteHandlerThread implements Runnable{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-//                    logger.info("Action:" + action);
+//                    log4j.info("Action:" + action);
                     out.println(action);
                     out.flush();
                 }
