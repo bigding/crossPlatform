@@ -1,4 +1,4 @@
-package controller;
+package motionSimulation;
 
 /**
  * 通过jni控制键盘事件

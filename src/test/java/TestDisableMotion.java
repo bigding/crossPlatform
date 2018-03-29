@@ -1,4 +1,4 @@
-import controller.DisableMotion;
+import motionSimulation.DisableMotion;
 
 public class TestDisableMotion {
     public static void main(String[] args) {

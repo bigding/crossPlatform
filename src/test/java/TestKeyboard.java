@@ -1,5 +1,4 @@
-import controller.KeyboardMotion;
-import org.jnativehook.keyboard.NativeKeyEvent;
+import motionSimulation.KeyboardMotion;
 
 public class TestKeyboard {
     public static void main(String[] args) {

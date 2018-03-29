@@ -1,4 +1,4 @@
-import controller.MouseMotion;
+import motionSimulation.MouseMotion;
 import listener.ActionListener;
 import listener.GlobalDeviceListener;
 

@@ -1,4 +1,4 @@
-package controller;
+package motionSimulation;
 
 public class DisableMotion {
     public static native void disableAll();
