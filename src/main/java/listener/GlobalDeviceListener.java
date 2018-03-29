@@ -22,13 +22,16 @@ import java.util.logging.Logger;
  */
 public class GlobalDeviceListener implements NativeMouseInputListener, NativeKeyListener, NativeMouseWheelListener {
 
-    public  ActionContainer actionContainer = null;
+    private static org.apache.log4j.Logger log4j = org.apache.log4j.Logger.getLogger(GlobalDeviceListener.class);
+
+    public  ActionContainer actionContainer;
 //    public  ActionContainer actionContainer = new ActionContainer();
     //注册全体监听器
     static GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
 
     public void setActionContainer(ActionContainer actionContainer){
         this.actionContainer = actionContainer;
+        System.out.println("actionContainer:"+this.actionContainer);
     }
 
     public void nativeMouseClicked(NativeMouseEvent e) {
@@ -37,7 +40,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseClick.put("id","1");
         mouseClick.put("clickCount",e.getClickCount());
         try {
-            actionContainer.offer(mouseClick);
+            this.actionContainer.offer(mouseClick);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
@@ -49,7 +52,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mousePress.put("id","2");
         mousePress.put("press",e.getButton());
         try {
-            actionContainer.offer(mousePress);
+            this.actionContainer.offer(mousePress);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
@@ -61,7 +64,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseRelease.put("id","3");
         mouseRelease.put("release",e.getButton());
         try {
-            actionContainer.offer(mouseRelease);
+            this.actionContainer.offer(mouseRelease);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
@@ -73,11 +76,13 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseMove.put("id","4");
         mouseMove.put("posiX",e.getX());
         mouseMove.put("posiY",e.getY());
-//        System.out.println(mouseMove);
         try {
-            actionContainer.offer(mouseMove);
+            System.out.println(mouseMove);
+            System.out.println("action:"+this.actionContainer);
+            this.actionContainer.offer(mouseMove);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+//            e1.printStackTrace();
+            log4j.error("add mouseMove event to eventContainer fail");
         }
     }
 
@@ -88,7 +93,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseDrag.put("posiX",e.getX());
         mouseDrag.put("posiY",e.getY());
         try {
-            actionContainer.offer(mouseDrag);
+            this.actionContainer.offer(mouseDrag);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
@@ -100,7 +105,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseWhellMove.put("id","6");
         mouseWhellMove.put("wheelRotation",e.getWheelRotation());
         try {
-            actionContainer.offer(mouseWhellMove);
+            this.actionContainer.offer(mouseWhellMove);
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
@@ -115,7 +120,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
             keyPress.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
             keyPress.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
             try {
-                actionContainer.offer(keyPress);
+                this.actionContainer.offer(keyPress);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -132,7 +137,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
             keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
             keyRelease.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
             try {
-                actionContainer.offer(keyRelease);
+                this.actionContainer.offer(keyRelease);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -148,7 +153,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
             keyType.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
             keyType.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
             try {
-                actionContainer.offer(keyType);
+                this.actionContainer.offer(keyType);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -158,7 +163,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     /**
      * 开启监听器
      */
-    public static void startGlobalListener() {
+    public void startGlobalListener() {
 //        actionContainer = ActionContainer.getActionContainer();
 //        actionContainer = new ActionContainer();
 
@@ -166,6 +171,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         logger.setLevel(Level.WARNING);
         logger.setUseParentHandlers(false);
 
+        System.out.println("start:"+this.actionContainer);
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
@@ -187,7 +193,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     /**
      * 关闭监听器
      */
-    public static void removeGlobalListener() {
+    public void removeGlobalListener() {
         GlobalScreen.removeNativeMouseWheelListener(globalDeviceListener);
         GlobalScreen.removeNativeKeyListener(globalDeviceListener);
         GlobalScreen.removeNativeMouseMotionListener(globalDeviceListener);

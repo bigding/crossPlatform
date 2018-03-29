@@ -8,13 +8,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server  {
+public class Server extends Thread {
     private static Logger logger = Logger.getLogger(Client.class);
 
     public static int port = 10000;//监听的端口号
 
     Thread serverReadThread,serverWriteThread;
     ServerSocket serverSocket = null;
+    ActionContainer serverActionContainer;
     static volatile Server server = null;
 
     private Server(){
@@ -46,7 +47,8 @@ public class Server  {
     }
 
     public void startServer(ActionContainer serverActionContainer){
-        init(serverActionContainer);
+        this.serverActionContainer = serverActionContainer;
+        start();  //启动线程监听客户端响应
     }
     public void stopServer(){
         try {
@@ -58,9 +60,10 @@ public class Server  {
         serverReadThread.interrupt();
     }
 
-    public void init(ActionContainer serverActionContainer) {
+    public void run() {
         try {
             serverSocket = new ServerSocket(port);
+            // 如果有多个客户端连接 可能会出错
             while (true) {
                 Socket client = serverSocket.accept();
                 //一个客户端连接就开两个线程分别处理读和写

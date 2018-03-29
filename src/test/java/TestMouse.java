@@ -12,7 +12,8 @@ public class TestMouse {
         }
     }
     public  void mouseMotionTest() throws InterruptedException {
-        GlobalDeviceListener.startGlobalListener();
+        GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
+        globalDeviceListener.startGlobalListener();
         ActionListener actionListener = new ActionListener();
         Thread listen = new Thread(actionListener);
         listen.start();
@@ -33,6 +34,6 @@ public class TestMouse {
         MouseMotion.middleUp();
         MouseMotion.wheelRotate(10);
         listen.interrupt();
-        GlobalDeviceListener.removeGlobalListener();
+        globalDeviceListener.removeGlobalListener();
     }
 }

@@ -18,10 +18,11 @@ public class ApplicationControl {
 
         GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
         globalDeviceListener.setActionContainer(serverActionContainer);
+//        globalDeviceListener.show();
 
 //        new Thread(actionListener).start();
-        server.startServer(serverActionContainer);
-        client.startClient(clientActionContainer);
+//        server.startServer(serverActionContainer);
+//        client.startClient(clientActionContainer);
         globalDeviceListener.startGlobalListener();
     }
 }
