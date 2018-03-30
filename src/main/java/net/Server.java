@@ -2,7 +2,9 @@ package net;
 
 import com.alibaba.fastjson.JSONObject;
 import common.ActionContainer;
+import listener.GlobalDeviceListener;
 import org.apache.log4j.Logger;
+import org.jnativehook.GlobalScreen;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -69,6 +71,10 @@ public class Server extends Thread {
                 Socket client = serverSocket.accept();
                 //一个客户端连接就开两个线程分别处理读和写
                 log4j.info("server listen to port "+port);
+                //开启服务器端的全局监听器
+                GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
+                globalDeviceListener.startGlobalListener(serverActionContainer);
+
                 serverReadThread = new Thread(new ServerReadHandlerThread(client));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));
                 serverReadThread.start();
