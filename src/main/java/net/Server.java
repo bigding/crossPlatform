@@ -66,11 +66,11 @@ public class Server extends Thread {
     public void run() {
         try {
             serverSocket = new ServerSocket(port);
+            log4j.info("server listen to port "+port);
             // 如果有多个客户端连接 可能会出错
             while (true) {
                 Socket client = serverSocket.accept();
                 //一个客户端连接就开两个线程分别处理读和写
-                log4j.info("server listen to port "+port);
                 //开启服务器端的全局监听器
                 GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
                 globalDeviceListener.startGlobalListener(serverActionContainer);
