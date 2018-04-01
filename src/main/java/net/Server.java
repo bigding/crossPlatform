@@ -22,7 +22,7 @@ public class Server extends Thread {
 
     Thread serverReadThread,serverWriteThread,waitStartListenerThread;
     ServerSocket serverSocket = null;
-    ActionContainer serverActionContainer;
+    ActionContainer serverActionContainer,motionContainer;
     ConcurrentHashMap <String, SystemInfo> clientMap;
     static volatile Server server = null;
 
@@ -54,8 +54,11 @@ public class Server extends Thread {
         return server;
     }
 
-    public void startServer(ActionContainer serverActionContainer, ConcurrentHashMap<String, SystemInfo> clientMap){
+    public void startServer(ActionContainer serverActionContainer,
+                            ActionContainer motionContainer,
+                            ConcurrentHashMap<String, SystemInfo> clientMap){
         this.serverActionContainer = serverActionContainer;
+        this.motionContainer = motionContainer;
         this.clientMap = clientMap;
         start();  //启动线程监听客户端响应
     }
@@ -76,8 +79,9 @@ public class Server extends Thread {
             // 如果有多个客户端连接 可能会出错
             while (true) {
                 Socket client = serverSocket.accept();
-                //新建一个线程等待,当客户端系统信息传输到服务端后,开启服务器端的全局监听器
-                waitStartListenerThread = new Thread(new StartListenerThread(serverActionContainer,clientMap));
+                //新建一个线程等待,当客户端系统信息传输到服务端后,开启服务器端的全局监听器,
+                // 并将监听器监听到的消息存放在专用的容器中,并且开启处理鼠标键盘信息的线程
+                waitStartListenerThread = new Thread(new StartListenerThread(motionContainer,clientMap));
                 //一个客户端连接就开两个线程分别处理读和写
                 serverReadThread = new Thread(new ServerReadHandlerThread(client,clientMap));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));

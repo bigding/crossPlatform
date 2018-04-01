@@ -11,22 +11,20 @@ import java.util.concurrent.ConcurrentHashMap;
 class StartListenerThread implements Runnable{
     private static Logger log4j = Logger.getLogger(StartListenerThread.class);
 
-    ActionContainer serverActionContainer;
+    ActionContainer motionContainer;
     ConcurrentHashMap<String, SystemInfo> clientMap;
 
-    StartListenerThread(ActionContainer serverActionContainer, ConcurrentHashMap<String, SystemInfo> clientMap){
-        this.serverActionContainer = serverActionContainer;
+    StartListenerThread(ActionContainer motionContainer, ConcurrentHashMap<String, SystemInfo> clientMap){
+        this.motionContainer = motionContainer;
         this.clientMap = clientMap;
     }
 
     @Override
     public void run() {
         while (true){
-//            System.out.println("is:"+clientMap.size());
-//            log4j.info("map size:"+clientMap.size());
             if(clientMap.size() != 0){
                 GlobalDeviceListener globalDeviceListener = new GlobalDeviceListener();
-                globalDeviceListener.startGlobalListener(serverActionContainer);
+                globalDeviceListener.startGlobalListener(motionContainer);
                 log4j.info("server start listen to global device event.");
                 break;
             }

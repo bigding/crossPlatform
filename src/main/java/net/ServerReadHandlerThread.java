@@ -40,7 +40,6 @@ class ServerReadHandlerThread implements Runnable{
                     SystemInfo clientSysInfo = JSON.parseObject(say,SystemInfo.class);
                     clientMap.put("client",clientSysInfo);
                     log4j.info("get client system info.");
-                    System.out.println("size:"+clientMap.size());
                 }
                 else{
                     log4j.warn("no use information from client: "+say);
@@ -51,7 +50,7 @@ class ServerReadHandlerThread implements Runnable{
         }finally{
             if(client != null){
                 client = null;
-                log4j.info("connection disconnect");
+                log4j.info("connection disconnect.");
             }
         }
     }
