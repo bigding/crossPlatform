@@ -106,7 +106,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         if(keyCode != -1) {
             JSONObject keyPress = new JSONObject();
             keyPress.put("id", "7");
-            keyPress.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
+//            keyPress.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
             keyPress.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
             try {
                 this.actionContainer.offer(keyPress);
@@ -122,7 +122,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         if(keyCode != -1) {
             JSONObject keyRelease = new JSONObject();
             keyRelease.put("id", "8");
-            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
+//            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
             keyRelease.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
             try {
                 this.actionContainer.offer(keyRelease);
@@ -137,7 +137,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         if(keyCode != -1) {
             JSONObject keyType = new JSONObject();
             keyType.put("id", "9");
-            keyType.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
+//            keyType.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
             keyType.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
             try {
                 this.actionContainer.offer(keyType);

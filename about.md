@@ -26,7 +26,7 @@ Mouse Wheel Moved{
 }
 Key Pressed{
     id:7
-    keyText:键的名字
+    keyText:键的名字  //为节省空间,将其注释掉 下同
     keyCode:键对应的code
 }
 Key Released{
@@ -34,7 +34,7 @@ Key Released{
 }
 Key Typed{
     id:9
-    keyText:键的名字
+    keyText:键的名字  
     keyCode:键对应的code
 }
 system info{
@@ -42,4 +42,20 @@ system info{
     context:{
         name:**
     }
+}
+up{
+    id:up
+    num:*
+}
+up{
+    id:down
+    num:*
+}
+up{
+    id:left
+    num:*
+}
+up{
+    id:down
+    num:*
 }
