@@ -3,6 +3,9 @@ import common.SystemInfo;
 import net.Client;
 import net.Server;
 
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  *  程序启动启动入口
  */
@@ -18,16 +21,16 @@ public class ApplicationControl {
     public static void main(String[] args) {
         if("1".equals(args[0])){
             ActionContainer serverActionContainer = new ActionContainer();   //服务器端设备的动作信息 以及控制信息
-            SystemInfo clientSysInfo = null;
+            ConcurrentHashMap<String, SystemInfo> clientMap= new ConcurrentHashMap <>();
 
             if(args.length == 1){
                 Server server = Server.getServer();                              //单例模式获取Server
-                server.startServer(serverActionContainer,clientSysInfo);
+                server.startServer(serverActionContainer,clientMap);
             }
             else if(args.length == 2){
                 try {
                     Server server = Server.getServer(Integer.valueOf(args[1]));
-                    server.startServer(serverActionContainer,clientSysInfo);                           //单例模式获取Server
+                    server.startServer(serverActionContainer,clientMap);                           //单例模式获取Server
                 }
                 catch (NumberFormatException e){
                     System.out.println("invalid input parameter.");
@@ -53,10 +56,10 @@ public class ApplicationControl {
         else if("3".equals(args[0])){
             ActionContainer serverActionContainer = new ActionContainer();
             ActionContainer clientActionContainer = new ActionContainer();
-            SystemInfo clientSysInfo = null;
+            ConcurrentHashMap<String, SystemInfo> clientMap= new ConcurrentHashMap<>();
 
             Server server = Server.getServer();
-            server.startServer(serverActionContainer,clientSysInfo);
+            server.startServer(serverActionContainer,clientMap);
             Client client =Client.getClient();
             client.startClient(clientActionContainer);
         }

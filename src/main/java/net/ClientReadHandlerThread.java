@@ -17,6 +17,7 @@ class ClientReadHandlerThread implements Runnable{
 
     public ClientReadHandlerThread(Socket client) {
         this.client = client;
+        log4j.info("client read thread started.");
     }
     @Override
     public void run() {

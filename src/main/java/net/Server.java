@@ -11,6 +11,8 @@ import org.jnativehook.GlobalScreen;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Server extends Thread {
     private static Logger log4j = Logger.getLogger(Client.class);
@@ -21,7 +23,7 @@ public class Server extends Thread {
     Thread serverReadThread,serverWriteThread,waitStartListenerThread;
     ServerSocket serverSocket = null;
     ActionContainer serverActionContainer;
-    SystemInfo clientSysInfo = null;
+    ConcurrentHashMap <String, SystemInfo> clientMap;
     static volatile Server server = null;
 
     private Server(){
@@ -52,9 +54,9 @@ public class Server extends Thread {
         return server;
     }
 
-    public void startServer(ActionContainer serverActionContainer, SystemInfo clientSysInfo){
+    public void startServer(ActionContainer serverActionContainer, ConcurrentHashMap<String, SystemInfo> clientMap){
         this.serverActionContainer = serverActionContainer;
-        this.clientSysInfo = clientSysInfo;
+        this.clientMap = clientMap;
         start();  //启动线程监听客户端响应
     }
     public void stopServer(){
@@ -74,15 +76,15 @@ public class Server extends Thread {
             // 如果有多个客户端连接 可能会出错
             while (true) {
                 Socket client = serverSocket.accept();
-                //一个客户端连接就开两个线程分别处理读和写
                 //新建一个线程等待,当客户端系统信息传输到服务端后,开启服务器端的全局监听器
-
-                waitStartListenerThread = new Thread(new StartListenerThread(serverActionContainer,clientSysInfo));
-
-                serverReadThread = new Thread(new ServerReadHandlerThread(client,clientSysInfo));
+                waitStartListenerThread = new Thread(new StartListenerThread(serverActionContainer,clientMap));
+                //一个客户端连接就开两个线程分别处理读和写
+                serverReadThread = new Thread(new ServerReadHandlerThread(client,clientMap));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));
+
                 serverReadThread.start();
                 serverWriteThread.start();
+                waitStartListenerThread.start();
             }
         } catch (Exception e) {
             log4j.error("listen to port fail.");

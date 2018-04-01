@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
  *处理读操作的线程
@@ -16,11 +18,12 @@ class ServerReadHandlerThread implements Runnable{
     private static Logger log4j = Logger.getLogger(ServerReadHandlerThread.class);
 
     private Socket client=null;
-    private SystemInfo clientSysInfo = null;
+    ConcurrentHashMap <String, SystemInfo> clientMap;
 
-    public ServerReadHandlerThread(Socket client,SystemInfo clientSysInfo) {
+    public ServerReadHandlerThread(Socket client, ConcurrentHashMap<String, SystemInfo> clientMap) {
         this.client = client;
-        this.clientSysInfo = clientSysInfo;
+        this.clientMap = clientMap;
+        log4j.info("server read thread started.");
     }
 
     @Override
@@ -34,8 +37,10 @@ class ServerReadHandlerThread implements Runnable{
                 JSONObject jsonClientSay = JSONObject.parseObject(say);
                 //获取客户端的设备信息
                 if("sys_info".equals(jsonClientSay.get("id"))){
-                    this.clientSysInfo = JSON.parseObject(say,SystemInfo.class);
+                    SystemInfo clientSysInfo = JSON.parseObject(say,SystemInfo.class);
+                    clientMap.put("client",clientSysInfo);
                     log4j.info("get client system info.");
+                    System.out.println("size:"+clientMap.size());
                 }
                 else{
                     log4j.warn("no use information from client: "+say);

@@ -21,6 +21,7 @@ class ServerWriteHandlerThread implements Runnable{
     public ServerWriteHandlerThread(Socket client, ActionContainer serverActionContainer) {
         this.client = client;
         this.serverActionContainer = serverActionContainer;
+        log4j.info("server write thread started.");
     }
 
     @Override
