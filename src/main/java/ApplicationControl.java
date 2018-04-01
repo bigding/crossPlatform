@@ -1,4 +1,5 @@
 import common.ActionContainer;
+import common.SystemInfo;
 import net.Client;
 import net.Server;
 
@@ -17,15 +18,16 @@ public class ApplicationControl {
     public static void main(String[] args) {
         if("1".equals(args[0])){
             ActionContainer serverActionContainer = new ActionContainer();   //服务器端设备的动作信息 以及控制信息
+            SystemInfo clientSysInfo = null;
 
             if(args.length == 1){
                 Server server = Server.getServer();                              //单例模式获取Server
-                server.startServer(serverActionContainer);
+                server.startServer(serverActionContainer,clientSysInfo);
             }
             else if(args.length == 2){
                 try {
                     Server server = Server.getServer(Integer.valueOf(args[1]));
-                    server.startServer(serverActionContainer);                           //单例模式获取Server
+                    server.startServer(serverActionContainer,clientSysInfo);                           //单例模式获取Server
                 }
                 catch (NumberFormatException e){
                     System.out.println("invalid input parameter.");
@@ -46,6 +48,17 @@ public class ApplicationControl {
                     System.out.println("invalid input parameter.");
                 }
             }
+        }
+        //测试用入口  所有参数都为默认参数
+        else if("3".equals(args[0])){
+            ActionContainer serverActionContainer = new ActionContainer();
+            ActionContainer clientActionContainer = new ActionContainer();
+            SystemInfo clientSysInfo = null;
+
+            Server server = Server.getServer();
+            server.startServer(serverActionContainer,clientSysInfo);
+            Client client =Client.getClient();
+            client.startClient(clientActionContainer);
         }
         else{
             System.out.println("invalid input parameter.");

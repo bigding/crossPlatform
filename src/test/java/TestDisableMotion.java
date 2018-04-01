@@ -1,16 +1,16 @@
-import motionSimulation.DisableMotion;
+//import motionSimulation.DisableMotion;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
 
 public class TestDisableMotion {
+    public interface CLibrary extends Library {
+        CLibrary INSTANCE = (CLibrary)Native.loadLibrary("lib/Hook", CLibrary.class);
+
+        void FuncHookDevice();
+        void FuncEndHook();
+    }
     public static void main(String[] args) {
-        DisableMotion.disableAll();
-        for(int i = 0; i < 100; i++){
-            try {
-                System.out.println(i);
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        DisableMotion.enableAll();
+        CLibrary.INSTANCE.FuncHookDevice();
     }
 }

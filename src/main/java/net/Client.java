@@ -1,9 +1,11 @@
 package net;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import common.ActionContainer;
+import common.SystemInfo;
 import org.apache.log4j.Logger;
 
-import javax.swing.event.CaretListener;
 import java.io.*;
 import java.net.Socket;
 
@@ -16,6 +18,7 @@ public class Client {
 
     Thread clientReadThread,clientWriteThread;
     Socket clientSocket;
+    ActionContainer clientActionContainer;
     static volatile Client client = null;
 
     private Client(){
@@ -48,7 +51,20 @@ public class Client {
     }
 
     public void startClient(ActionContainer clientActionContainer){
-        //初始化动作容器
+        //初始化客户端存储容器
+        this.clientActionContainer = clientActionContainer;
+        //将系统信息序列化为json字符串,存入容器中
+        SystemInfo systemInfo = SystemInfo.getInstance();
+        JSONObject JsonSysInfo = new JSONObject();
+        JsonSysInfo.put("id","sys_info");
+        String sysInfoStr = JSON.toJSONString(systemInfo);
+        JsonSysInfo.put("context",sysInfoStr);
+        try {
+            this.clientActionContainer.offer(JsonSysInfo);
+        } catch (InterruptedException e) {
+//            e.printStackTrace();
+            log4j.error("failed when add system information to clientActionContainer.");
+        }
         handler();
     }
     public void stopClient(){
@@ -67,7 +83,7 @@ public class Client {
             log4j.info("client connected to "+ip+"\t"+port);
             //开启两个线程，一个负责读，一个负责写
             clientReadThread = new  Thread(new ClientReadHandlerThread(clientSocket));
-            clientWriteThread = new Thread(new ClientWriteHandlerThread(clientSocket));
+            clientWriteThread = new Thread(new ClientWriteHandlerThread(clientSocket,clientActionContainer));
             clientWriteThread.start();
             clientReadThread.start();
         } catch (Exception e) {
@@ -87,79 +103,3 @@ public class Client {
     }
 }
 
-/*
- *处理读操作的线程
- */
-class ClientReadHandlerThread implements Runnable{
-    private static Logger log4j = Logger.getLogger(ClientReadHandlerThread.class);
-
-    private Socket client;
-
-    public ClientReadHandlerThread(Socket client) {
-        this.client = client;
-    }
-    @Override
-    public void run() {
-        BufferedReader in = null;
-        try {
-            while(true){
-                //读取服务器端传来的数据
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                log4j.info("server: " + in.readLine());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            log4j.error("read data from server fail.");
-        } finally{
-            if(client != null){
-                client = null;
-            }
-        }
-    }
-}
-
-/*
- * 处理写操作的线程
- * 这里的输入是通过标准控制台输入的
- */
-class ClientWriteHandlerThread implements Runnable{
-    private static Logger log4j = Logger.getLogger(ClientWriteHandlerThread.class);
-    private Socket client;
-
-    public ClientWriteHandlerThread(Socket client) {
-        this.client = client;
-    }
-
-    @Override
-    public void run() {
-        PrintWriter out=null;
-        try {
-            out = new PrintWriter(client.getOutputStream());
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));//从控制台获取输入的内容
-        try {
-            while(true){
-                String read = reader.readLine();
-                out.println(read);
-                out.flush();
-                if("bye".equals(read.toLowerCase())){
-                    Client.getClient().stopClient();
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            client.close();
-            reader.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        out.close();
-    }
-}

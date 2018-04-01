@@ -65,12 +65,16 @@ public class SystemInfo {
 
     private SystemInfo() {
         init();
-        logger.info("创建系统信息成功");
+        logger.info("create os info success.");
     }
 
     public static SystemInfo getInstance(){
         if(systemInfo == null){
-            systemInfo =  new SystemInfo();
+            synchronized(SystemInfo.class){
+                if(systemInfo == null){
+                    systemInfo =  new SystemInfo();
+                }
+            }
             return systemInfo;
         }
         else{
@@ -83,19 +87,19 @@ public class SystemInfo {
      */
     public void PrintInfo(){
         Properties props=System.getProperties();
-        System.out.println("Java的运行环境版本："+props.getProperty("java.version"));
-        System.out.println("默认的临时文件路径："+props.getProperty("java.io.tmpdir"));
-        System.out.println("操作系统的名称："+props.getProperty("os.name"));
-        System.out.println("操作系统的构架："+props.getProperty("os.arch"));
-        System.out.println("操作系统的版本："+props.getProperty("os.version"));
-        System.out.println("文件分隔符："+props.getProperty("file.separator"));   //在 unix 系统中是＂／＂   
-        System.out.println("路径分隔符："+props.getProperty("path.separator"));   //在 unix 系统中是＂:＂   
-        System.out.println("行分隔符："+props.getProperty("line.separator"));   //在 unix 系统中是＂/n＂  
-        System.out.println("用户的账户名称："+props.getProperty("user.name"));
-        System.out.println("用户的主目录："+props.getProperty("user.home"));
-        System.out.println("用户的当前工作目录："+props.getProperty("user.dir"));
-        System.out.println("用户电脑屏幕宽度："+this.osScreenWidth);
-        System.out.println("用户电脑屏幕宽度："+this.osScreenHeight);
+        System.out.println("Java_version:"+props.getProperty("java.version"));
+        System.out.println("default_file_path:"+props.getProperty("java.io.tmpdir"));
+        System.out.println("os_name:"+props.getProperty("os.name"));
+        System.out.println("os_architecture:"+props.getProperty("os.arch"));
+        System.out.println("od_version:"+props.getProperty("os.version"));
+        System.out.println("file_separator:"+props.getProperty("file.separator"));   //在 unix 系统中是＂／＂
+        System.out.println("path_separator:"+props.getProperty("path.separator"));   //在 unix 系统中是＂:＂
+        System.out.println("line_separator:"+props.getProperty("line.separator"));   //在 unix 系统中是＂/n＂
+        System.out.println("user_name:"+props.getProperty("user.name"));
+        System.out.println("user_home:"+props.getProperty("user.home"));
+        System.out.println("user_directory:"+props.getProperty("user.dir"));
+        System.out.println("screen_width:"+this.osScreenWidth);
+        System.out.println("screen_height"+this.osScreenHeight);
     }
 
     /**
