@@ -150,7 +150,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     /**
      * 开启监听器
      */
-    public void startGlobalListener(ActionContainer serverActionContainer) {
+    public void startGlobalListener(ActionContainer motionContainer) {
 
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);
@@ -164,8 +164,8 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
 
             System.exit(1);
         }
-        //当没有注册时候就开始监听
-        this.setActionContainer(serverActionContainer);
+        
+        this.setActionContainer(motionContainer);
 
         GlobalScreen.addNativeMouseListener(globalDeviceListener);
         GlobalScreen.addNativeMouseMotionListener(globalDeviceListener);

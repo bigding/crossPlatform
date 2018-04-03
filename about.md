@@ -36,7 +36,6 @@ Key Typed{
     id:9
     keyText:键的名字  
     keyCode:键对应的code
-}
 system info{
     id:sys_info
     context:{

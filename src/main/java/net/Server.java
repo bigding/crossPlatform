@@ -81,7 +81,7 @@ public class Server extends Thread {
                 Socket client = serverSocket.accept();
                 //新建一个线程等待,当客户端系统信息传输到服务端后,开启服务器端的全局监听器,
                 // 并将监听器监听到的消息存放在专用的容器中,并且开启处理鼠标键盘信息的线程
-                waitStartListenerThread = new Thread(new StartListenerThread(motionContainer,clientMap));
+                waitStartListenerThread = new Thread(new StartListenerThread(motionContainer,serverActionContainer,clientMap));
                 //一个客户端连接就开两个线程分别处理读和写
                 serverReadThread = new Thread(new ServerReadHandlerThread(client,clientMap));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));

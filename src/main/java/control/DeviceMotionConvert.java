@@ -14,13 +14,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DeviceMotionConvert implements Runnable {
     private static Logger log4j = Logger.getLogger(DeviceMotionConvert.class);
 
+    SystemInfo serverSysInfo = SystemInfo.getInstance();
     ActionContainer motionContainer, serverActionContainer;
     ConcurrentHashMap<String, SystemInfo> clientMap;
     int clientScreenWidth, clientScreenHeight;
+    int serverScreenWidth, serverScreenHeight;
     int clientMouseX, clientMouseY;
 
 
-    DeviceMotionConvert(ActionContainer motionContainer,
+    public DeviceMotionConvert(ActionContainer motionContainer,
                         ActionContainer serverActionContainer,
                         ConcurrentHashMap<String, SystemInfo> clientMap) {
         this.motionContainer = motionContainer;
@@ -30,6 +32,9 @@ public class DeviceMotionConvert implements Runnable {
         SystemInfo clientSysInfo = clientMap.get("client");
         this.clientScreenWidth = clientSysInfo.getOsScreenWidth();
         this.clientScreenHeight = clientSysInfo.getOsSCreenHeight();
+
+        this.serverScreenWidth = serverSysInfo.getOsScreenWidth();
+        this.serverScreenHeight = serverSysInfo.getOsSCreenHeight();
     }
 
     @Override
@@ -44,11 +49,11 @@ public class DeviceMotionConvert implements Runnable {
                      */
                     if ("1".equals(id)) {
                         //鼠标点击次数?  不知道怎么处理,暂不处理
-                    } else if ("2".equals(id)||"3".equals(id)||"6".equals(id)
-                            ||"7".equals(id)||"8".equals(id)) {
-                        serverActionContainer.offer(actionStr);
+                    } else if("2".equals(id)||"3".equals(id)||"6".equals(id)||
+                            "7".equals(id)||"8".equals(id)){
+                        serverActionContainer.offer(motionContainer.poll());
                     } else if ("4".equals(id)) {
-                        
+
                     } else if ("5".equals(id)) {
                         //鼠标拖拽,暂不处理
                     } else if ("9".equals(id)) {
