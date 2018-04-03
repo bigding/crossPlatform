@@ -46,15 +46,20 @@ up{
     id:up
     num:*
 }
-up{
+down{
     id:down
     num:*
 }
-up{
+left{
     id:left
     num:*
 }
-up{
-    id:down
+right{
+    id:right
     num:*
+}
+to{
+    id:to
+    posiX:*
+    posiY:*
 }
