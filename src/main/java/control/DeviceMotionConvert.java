@@ -62,6 +62,7 @@ public class DeviceMotionConvert implements Runnable {
 
     @Override
     public void run() {
+        log4j.info("motion convert class ready to work.");
         int mouseAt = 1;   //当为1时,鼠标在服务器机;当为2时,鼠标在客户机
         int[] mousePosi = new int[2];  //存储前一刻鼠标的位置
         while (true) {
