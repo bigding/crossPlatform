@@ -40,23 +40,20 @@ public class DeviceMotionConvert implements Runnable {
     }
 
     //当鼠标位置在两台机器间变化时,纵坐标的变化值转换函数,posiY的转换为A->B
-    public int posiYChange(int heightA,int heightB,int posiY){
+    public int posiYChange(int heightA, int heightB, int posiY) {
         int diff = heightA - heightB;
-        if(diff == 0)
+        if (diff == 0)
             return posiY;
-        else if(diff > 0){
-            if(posiY <= diff/2){
+        else if (diff > 0) {
+            if (posiY <= diff / 2) {
                 return 0;
-            }
-            else if(posiY >= diff/2 + heightB){
+            } else if (posiY >= diff / 2 + heightB) {
                 return heightB;
+            } else {
+                return posiY - diff / 2;
             }
-            else{
-                return posiY - diff/2;
-            }
-        }
-        else{
-            return posiY + diff/2;
+        } else {
+            return posiY + diff / 2;
         }
     }
 
@@ -68,13 +65,13 @@ public class DeviceMotionConvert implements Runnable {
         while (true) {
             if (!motionContainer.isEmpty()) {
                 try {
-                    JSONObject actionStr = motionContainer.poll();
-                    String id = actionStr.getString("id");
+                    JSONObject action = motionContainer.poll();
+                    String id = action.getString("id");
                     /**
                      *具体每个判断对应的情况,参考 about.md
                      */
                     if ("4".equals(id)) {
-                        JSONObject mouse = actionStr;
+                        JSONObject mouse = action;
                         serverMouseX = (int) mouse.get("posiX");
                         serverMouseY = (int) mouse.get("posiY");
                         //当鼠标到达服务器机最左端时,将鼠标交给客户机
@@ -82,7 +79,7 @@ public class DeviceMotionConvert implements Runnable {
                             if (serverMouseX == 0) {
                                 mouseAt = 2;
                                 clientMouseX = clientScreenWidth;
-                                clientMouseY = posiYChange(serverScreenHeight,clientScreenHeight,serverMouseY);
+                                clientMouseY = posiYChange(serverScreenHeight, clientScreenHeight, serverMouseY);
 
                                 JSONObject jsonMouseMotion = new JSONObject();
                                 jsonMouseMotion.put("id", "to");
@@ -90,28 +87,29 @@ public class DeviceMotionConvert implements Runnable {
                                 jsonMouseMotion.put("posiY", clientMouseY);
                                 serverActionContainer.offer(jsonMouseMotion);
 
-                                mousePosi[0] = 2;
+                                mousePosi[0] = 2;           //使光标位于屏幕最左侧
                                 mousePosi[1] = serverMouseY;
 
                                 MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                         }
-                        else if(mouseAt == 2){
+                        //鼠标的光标在客户机时,处理鼠标移动信息和到达边缘时光标所在处的变换
+                        else if (mouseAt == 2) {
                             int x = serverMouseX - mousePosi[0];
                             int y = serverMouseY - mousePosi[1];
 
                             clientMouseX = clientMouseX + x;
                             clientMouseY = clientMouseY + y;
-                            if(clientMouseY < 0) {
+                            if (clientMouseY < 0) {
                                 clientMouseY = 0;
                             }
-                            if(clientMouseY > clientScreenHeight) {
+                            if (clientMouseY > clientScreenHeight) {
                                 clientMouseY = clientScreenHeight;
                             }
-                            if(clientMouseX < 0) {
+                            if (clientMouseX < 0) {
                                 clientMouseX = 0;
                             }
-                            if(clientMouseX > clientScreenWidth) {
+                            if (clientMouseX > clientScreenWidth) {
                                 clientMouseX = clientScreenWidth;
                             }
 
@@ -121,31 +119,33 @@ public class DeviceMotionConvert implements Runnable {
                             jsonMouseMotion.put("posiY", clientMouseY);
                             serverActionContainer.offer(jsonMouseMotion);
 
-                            if(clientMouseX != clientScreenWidth){
+                            if (clientMouseX != clientScreenWidth) {
                                 MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                             //鼠标到达客户端的最右端,鼠标移交给服务器机
-                            else{
+                            else {
                                 mouseAt = 1;
                                 serverMouseX = 1;
-                                serverMouseY = posiYChange(clientScreenHeight,serverScreenHeight,clientMouseY);
-                                MouseMotion.moveTo(serverMouseX,serverMouseY);
+                                serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
+                                MouseMotion.moveTo(serverMouseX, serverMouseY);
                             }
                         }
                     }
-                    //当鼠标光标正在客户机时,
+                    //当鼠标光标正在客户机时,才将除了鼠标移动以外的信息传输到客户机
                     if (mouseAt == 2) {
                         if ("1".equals(id)) {
                             //鼠标点击次数?  不知道怎么处理,暂不处理
                         } else if ("2".equals(id) || "3".equals(id) || "6".equals(id) ||
                                 "7".equals(id) || "8".equals(id)) {
-                            serverActionContainer.offer(actionStr);
+                            serverActionContainer.offer(action);
+                        } else if ("4".equals(id)) {
+                            //不处理 上面已经经行了处理
                         } else if ("5".equals(id)) {
                             //鼠标拖拽,暂不处理
                         } else if ("9".equals(id)) {
                             //键盘键入,不知道怎么处理 暂不处理
                         } else {
-                            log4j.warn("meaningless motion conversion.");
+                            log4j.warn("meaningless motion conversion:" + id);
                         }
                     }
                 } catch (InterruptedException e) {

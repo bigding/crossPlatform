@@ -42,22 +42,6 @@ system info{
         name:**
     }
 }
-up{
-    id:up
-    num:*
-}
-down{
-    id:down
-    num:*
-}
-left{
-    id:left
-    num:*
-}
-right{
-    id:right
-    num:*
-}
 to{
     id:to
     posiX:*
