@@ -49,6 +49,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mousePress.put("id","2");
         mousePress.put("press",e.getButton());
         try {
+            log4j.info("mousePress:"+mousePress);
             this.actionContainer.offer(mousePress);
         } catch (InterruptedException e1) {
             log4j.error("add mousePressed event to eventContainer fail");
@@ -60,6 +61,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseRelease.put("id","3");
         mouseRelease.put("release",e.getButton());
         try {
+            log4j.info("mouseRelease:"+mouseRelease);
             this.actionContainer.offer(mouseRelease);
         } catch (InterruptedException e1) {
             log4j.error("add mouseReleased event to eventContainer fail");

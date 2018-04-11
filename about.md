@@ -3,7 +3,7 @@ Mouse Clicked{
     clickCount:点击数量
 }
 Mouse Pressed{
-    id:2
+****    id:2
     press:1/2    # 1为点击鼠标左键,2为点击鼠标右键
 }
 Mouse Released{

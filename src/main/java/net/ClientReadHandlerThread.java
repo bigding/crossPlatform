@@ -29,34 +29,44 @@ class ClientReadHandlerThread implements Runnable{
             while(true){
                 //读取服务器端传来的数据
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                JSONObject action = JSONObject.parseObject(in.readLine());
+                String inStr = in.readLine();
+                //可能因为网络状况等原因 传输的数据会出现错误,要对接收到的数据严格验证,不合要求的数据直接抛弃
+                if(inStr == ""|| inStr.isEmpty()) {
+                    continue;
+                }
+                JSONObject action;
+                try{
+                    action = JSONObject.parseObject(inStr);
+                }catch (Exception e){
+                    continue;
+                }
                 log4j.info("server: " + action);
-                if("2".equals(action.get("id"))){
-                    if("1".equals(action.get("press"))){
+                if("2".equals(action.getString("id"))){
+                    if("1".equals(action.getString("press"))){
                         MouseMotion.leftDown();
                     }
                     else{
                         MouseMotion.rightDown();
                     }
                 }
-                else if("3".equals(action.get("id"))){
-                    if("1".equals(action.get("press"))){
+                else if("3".equals(action.getString("id"))){
+                    if("1".equals(action.getString("release"))){
                         MouseMotion.leftUp();
                     }
                     else{
                         MouseMotion.rightUp();
                     }
                 }
-                else if("6".equals(action.get("id"))){
+                else if("6".equals(action.getString("id"))){
                     MouseMotion.wheelRotate((int)action.get("wheelRotation"));
                 }
-                else if("7".equals(action.get("id"))){
+                else if("7".equals(action.getString("id"))){
                     KeyboardMotion.keyDown((int)action.get("keyCode"));
                 }
-                else if("8".equals(action.get("id"))){
+                else if("8".equals(action.getString("id"))){
                     KeyboardMotion.keyUp((int)action.get("keyCode"));
                 }
-                else if("to".equals(action.get("id"))){
+                else if("to".equals(action.getString("id"))){
                     MouseMotion.moveTo((int)action.get("posiX"),(int)action.get("posiY"));
                 }
                 else{
