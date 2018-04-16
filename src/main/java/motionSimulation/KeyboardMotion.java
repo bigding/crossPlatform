@@ -8,7 +8,7 @@ import com.sun.jna.Native;
  */
 public class KeyboardMotion {
     public interface KeyBoard extends Library {
-        KeyBoard INSTANCE = ( KeyBoard) Native.loadLibrary("lib/KeyBoard",  KeyBoard.class);
+        KeyBoard INSTANCE = ( KeyBoard) Native.loadLibrary("lib/x64/KeyBoard",  KeyBoard.class);
         public void keyDown(int a);
         public void keyUp(int a);
     }

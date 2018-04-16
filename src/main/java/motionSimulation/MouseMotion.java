@@ -8,7 +8,7 @@ import com.sun.jna.Native;
  */
 public class MouseMotion {
     public interface Mouse extends Library {
-        Mouse INSTANCE = (Mouse) Native.loadLibrary("lib/Mouse", Mouse.class);
+        Mouse INSTANCE = (Mouse) Native.loadLibrary("lib/x64/Mouse", Mouse.class);
         public void mouseUp();
         public void mouseDown();
         public void mouseLeft();

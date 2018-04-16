@@ -5,6 +5,6 @@ public class DisableMotion {
     public static native void enableAll();
 
     static {
-        System.loadLibrary("lib/DisableMotion");
+        System.loadLibrary("lib/x64/DisableMotion");
     }
 }
