@@ -3,12 +3,15 @@ import com.sun.jna.Native;
 
 public class JnaTest {
     public interface Jna extends Library{
-        Jna INSTANCE = (Jna) Native.loadLibrary("lib/JnaTest",Jna.class);
+        Jna INSTANCE = (Jna) Native.loadLibrary("lib/x64/mouseShow",Jna.class);
 
-        public int add(int a,int b);
+        public void show();
+        public void hide();
     }
 
-    public static void main(String[] args) {
-        System.out.println(Jna.INSTANCE.add(2,3));
+    public static void main(String[] args) throws InterruptedException {
+        Jna.INSTANCE.show();
+        Thread.sleep(10000);
+        Jna.INSTANCE.hide();
     }
 }

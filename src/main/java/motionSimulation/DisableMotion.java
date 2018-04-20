@@ -1,10 +1,18 @@
 package motionSimulation;
 
-public class DisableMotion {
-    public static native void disableAll();
-    public static native void enableAll();
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 
-    static {
-        System.loadLibrary("lib/x64/DisableMotion");
+public class DisableMotion {
+    public interface  Hook extends Library {
+        Hook INSTANCE = (Hook) Native.loadLibrary("lib/x64/Hook",Hook.class);
+        public void FuncEndHook();
+        public void FuncHookDevice();
+    }
+    public static void enableDevice(){
+        Hook.INSTANCE.FuncEndHook();
+    }
+    public static void disableDevice(){
+        Hook.INSTANCE.FuncHookDevice();
     }
 }
