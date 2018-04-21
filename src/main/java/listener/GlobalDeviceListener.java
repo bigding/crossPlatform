@@ -73,6 +73,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseMove.put("id","4");
         mouseMove.put("posiX",e.getX());
         mouseMove.put("posiY",e.getY());
+        log4j.info(mouseMove);
         try {
             this.actionContainer.offer(mouseMove);
         } catch (InterruptedException e1) {
