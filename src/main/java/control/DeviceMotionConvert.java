@@ -77,6 +77,7 @@ public class DeviceMotionConvert implements Runnable {
                         //当鼠标到达服务器机最左端时,将鼠标交给客户机
                         if (mouseAt == 1) {
                             if (serverMouseX == 0) {
+                                //将部分监听权交给hook, 并将服务器机鼠标光标隐藏,禁用鼠标点击,禁用键盘输入
                                 mouseAt = 2;
                                 clientMouseX = clientScreenWidth;
                                 clientMouseY = posiYChange(serverScreenHeight, clientScreenHeight, serverMouseY);
@@ -87,9 +88,10 @@ public class DeviceMotionConvert implements Runnable {
                                 jsonMouseMotion.put("posiY", clientMouseY);
                                 serverActionContainer.offer(jsonMouseMotion);
 
-                                mousePosi[0] = 2;           //使光标位于屏幕最左侧
-                                mousePosi[1] = serverMouseY;
 
+                                //使光标位于服务器机屏幕中央
+                                mousePosi[0] = serverScreenWidth/2;
+                                mousePosi[1] = serverScreenHeight/2;
                                 MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                         }
@@ -100,15 +102,19 @@ public class DeviceMotionConvert implements Runnable {
 
                             clientMouseX = clientMouseX + x;
                             clientMouseY = clientMouseY + y;
+                            //客户机屏幕上边缘
                             if (clientMouseY < 0) {
                                 clientMouseY = 0;
                             }
+                            //客户机屏幕下边缘
                             if (clientMouseY > clientScreenHeight) {
                                 clientMouseY = clientScreenHeight;
                             }
+                            //客户机屏幕左边缘
                             if (clientMouseX < 0) {
                                 clientMouseX = 0;
                             }
+                            //客户机屏幕右边缘
                             if (clientMouseX > clientScreenWidth) {
                                 clientMouseX = clientScreenWidth;
                             }
@@ -127,6 +133,8 @@ public class DeviceMotionConvert implements Runnable {
                                 mouseAt = 1;
                                 serverMouseX = 1;
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
+                                //显示服务器机鼠标光标并移动到指定位置
+                                //同时回复正常监听
                                 MouseMotion.moveTo(serverMouseX, serverMouseY);
                             }
                         }

@@ -1,15 +1,31 @@
-import com.sun.jna.Native;
-import com.sun.jna.win32.StdCallLibrary;
+import hook.KeyHook;
+import hook.MouseHook;
 
-public class Test
-{
+public class Test {
     public static void main(String[] args) throws InterruptedException {
-//        MouseListenTest mouseListenTest = new MouseListenTest();
-//        mouseListenTest.setMouseHook();
-////        for (int i = 0; i < 10; i++) {
-////            System.out.println(i);
-////            Thread.sleep(1000);
-////        }
-//        mouseListenTest.unsetMouseHook();
+        MouseHook mouseHook = new MouseHook();
+        Thread mThread = new Thread(){
+            @Override
+            public void run() {
+                mouseHook.startMouseHook();
+            }
+        };
+        mThread.start();
+//        Thread.sleep(10000);
+        mouseHook.stopMouseHook();
+        mThread.interrupt();
+
+
+//        KeyHook keyHook = new KeyHook();
+//        Thread thread = new Thread(){
+//            @Override
+//            public void run() {
+//                keyHook.startKeyHook();
+//            }
+//        };
+//        thread.start();
+//        Thread.sleep(10000);
+//        keyHook.stopKeyHook();
+//        thread.interrupt();
     }
 }

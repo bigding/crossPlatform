@@ -25,9 +25,10 @@ public class MouseHook {
     public static final int WM_WHEELMOVE = 522;
     public User32 lib;
     private static HHOOK hhk;
-    private MouseHookListener mouseHook;
+    private MouseHookListener mouseHookListener;
     private HMODULE hMod;
     private boolean isWindows = false;
+    private MouseHook mouseHook;
 
     public MouseHook() {
         isWindows = Platform.isWindows();
@@ -40,14 +41,14 @@ public class MouseHook {
 
     //添加钩子监听
     public void addMouseHookListener(MouseHookListener mouseHook) {
-        this.mouseHook = mouseHook;
-        this.mouseHook.lib = lib;
+        this.mouseHookListener = mouseHook;
+        this.mouseHookListener.lib = lib;
     }
 
     //启动
     public void startWindowsHookEx() {
         if (isWindows) {
-            lib.SetWindowsHookEx(WinUser.WH_MOUSE_LL, mouseHook, hMod, 0);
+            lib.SetWindowsHookEx(WinUser.WH_MOUSE_LL, mouseHookListener, hMod, 0);
             int result;
             MSG msg = new MSG();
             while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
@@ -73,9 +74,10 @@ public class MouseHook {
     }
 
 
-    public static void main(String[] args) {
+    public void startMouseHook() {
+//    public static void main(String[] args) {
         try {
-            MouseHook mouseHook = new MouseHook();
+            mouseHook = new MouseHook();
             mouseHook.addMouseHookListener(new MouseHookListener() {
                 //回调监听
                 public LRESULT callback(int nCode, WPARAM wParam, MouseHookStruct lParam) {
@@ -126,11 +128,17 @@ public class MouseHook {
             });
             mouseHook.startWindowsHookEx();
 
-            Thread.sleep(20000);
-            mouseHook.stopWindowsHookEx();
+//            Thread.sleep(10000);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void stopMouseHook() {
+        mouseHook.stopWindowsHookEx();
+    }
+
 }
 

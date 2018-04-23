@@ -14,14 +14,15 @@ import com.sun.jna.platform.win32.WinUser.LowLevelKeyboardProc;
 import com.sun.jna.platform.win32.WinUser.MSG;
 
 /** Sample implementation of a low-level keyboard hook on W32. */
-public class KeyListenHook {
-    private static volatile boolean quit;
+public class KeyHook {
+    private static volatile boolean quit;  //是否退出hook的标志位
     private static HHOOK hhk;
     private static LowLevelKeyboardProc keyboardHook;
+    final User32 lib = User32.INSTANCE;
+    HMODULE hMod;
 
-    public static void main(String[] args) {
-        final User32 lib = User32.INSTANCE;
-        HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
+    public void startKeyHook(){
+        hMod = Kernel32.INSTANCE.GetModuleHandle(null);
         keyboardHook = new LowLevelKeyboardProc() {
             @Override
             public LRESULT callback(int nCode, WPARAM wParam, KBDLLHOOKSTRUCT info) {
@@ -33,9 +34,6 @@ public class KeyListenHook {
                             break;
                         case WinUser.WM_KEYDOWN:
                             System.err.println("keyDown, key=" + info.vkCode);
-                            if (info.vkCode == 81) {
-                                quit = true;
-                            }
                             break;
                         case WinUser.WM_SYSKEYUP:
                             System.err.println("sysKeyUp, key=" + info.vkCode);
@@ -54,14 +52,15 @@ public class KeyListenHook {
             }
         };
         hhk = lib.SetWindowsHookEx(WinUser.WH_KEYBOARD_LL, keyboardHook, hMod, 0);
-        System.out.println("Keyboard hook installed, type anywhere, 'q' to quit");
+
+
         new Thread() {
             @Override
             public void run() {
                 while (!quit) {
                     try { Thread.sleep(10); } catch(Exception e) { }
                 }
-                System.err.println("unhook and exit");
+                System.out.println("unhook and exit");
                 lib.UnhookWindowsHookEx(hhk);
                 System.exit(0);
             }
@@ -82,5 +81,9 @@ public class KeyListenHook {
             }
         }
         lib.UnhookWindowsHookEx(hhk);
+    }
+
+    public void stopKeyHook(){
+        quit = true;
     }
 }
