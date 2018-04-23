@@ -23,64 +23,21 @@ public class MouseHook {
     public static final int WM_MBUTTONDOWN = 519;
     public static final int WM_MBUTTONUP = 520;
     public static final int WM_WHEELMOVE = 522;
-    public User32 lib;
+
+    private static volatile boolean quit;  //是否退出hook的标志位
+    final User32 lib = User32.INSTANCE;
+    MouseHookListener hookListener;
     private static HHOOK hhk;
-    private MouseHookListener mouseHookListener;
     private HMODULE hMod;
-    private boolean isWindows = false;
-    private MouseHook mouseHook;
-
-    public MouseHook() {
-        isWindows = Platform.isWindows();
-        if (isWindows) {
-            lib = User32.INSTANCE;
-            hMod = Kernel32.INSTANCE.GetModuleHandle(null);
-        }
-
-    }
-
-    //添加钩子监听
-    public void addMouseHookListener(MouseHookListener mouseHook) {
-        this.mouseHookListener = mouseHook;
-        this.mouseHookListener.lib = lib;
-    }
-
-    //启动
-    public void startWindowsHookEx() {
-        if (isWindows) {
-            lib.SetWindowsHookEx(WinUser.WH_MOUSE_LL, mouseHookListener, hMod, 0);
-            int result;
-            MSG msg = new MSG();
-            while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
-                if (result == -1) {
-                    System.err.println("error in get message");
-                    break;
-                } else {
-                    System.err.println("got message");
-                    lib.TranslateMessage(msg);
-                    lib.DispatchMessage(msg);
-                }
-            }
-        }
-
-    }
-
-    //关闭
-    public void stopWindowsHookEx() {
-        if (isWindows) {
-            lib.UnhookWindowsHookEx(hhk);
-        }
-
-    }
 
 
     public void startMouseHook() {
-//    public static void main(String[] args) {
-        try {
-            mouseHook = new MouseHook();
-            mouseHook.addMouseHookListener(new MouseHookListener() {
+//        try {
+            hMod = Kernel32.INSTANCE.GetModuleHandle(null);
+            hookListener = new MouseHookListener() {
                 //回调监听
                 public LRESULT callback(int nCode, WPARAM wParam, MouseHookStruct lParam) {
+                    lib = User32.INSTANCE;
                     long flag = 1;
                     if (nCode >= 0) {
                         switch (wParam.intValue()) {
@@ -125,20 +82,45 @@ public class MouseHook {
                     //lParam：Param的值传递给当前Hook过程。此参数的含义取决于当前的钩链与钩的类型。
                     return lib.CallNextHookEx(hhk, nCode, wParam, lParam.getPointer());
                 }
-            });
-            mouseHook.startWindowsHookEx();
+            };
+            hhk = lib.SetWindowsHookEx(WinUser.WH_MOUSE_LL, hookListener, hMod, 0);
 
-//            Thread.sleep(10000);
+            new Thread() {
+                @Override
+                public void run() {
+                    while (!quit) {
+                        try {
+                            Thread.sleep(10);
+                        } catch (Exception e) {
+                        }
+                    }
+                    lib.UnhookWindowsHookEx(hhk);
+                    System.exit(0);
+                }
+            }.start();
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            int result;
+            MSG msg = new MSG();
+            while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
+                if (result == -1) {
+                    System.err.println("err in get message");
+                    break;
+                } else {
+                    System.err.println("got message");
+                    lib.TranslateMessage(msg);
+                    lib.DispatchMessage(msg);
+                }
+            }
+            lib.UnhookWindowsHookEx(hhk);
+//        }
+//        catch (Exception e){
+//
+//        }
     }
+
 
     public void stopMouseHook() {
-        mouseHook.stopWindowsHookEx();
+        quit = true;
     }
-
 }
 

@@ -11,7 +11,7 @@ public class Test {
             }
         };
         mThread.start();
-//        Thread.sleep(10000);
+        Thread.sleep(10000);
         mouseHook.stopMouseHook();
         mThread.interrupt();
 
