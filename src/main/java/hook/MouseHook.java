@@ -1,14 +1,14 @@
-package mouseHook;
+package hook;
 
 import com.sun.jna.Platform;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.User32;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.*;
 import com.sun.jna.platform.win32.WinDef.HMODULE;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
-import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.HHOOK;
 import com.sun.jna.platform.win32.WinUser.MSG;
+
 
 /**
  * 鼠标钩子
@@ -22,6 +22,7 @@ public class MouseHook {
     public static final int WM_RBUTTONUP = 517;
     public static final int WM_MBUTTONDOWN = 519;
     public static final int WM_MBUTTONUP = 520;
+    public static final int WM_WHEELMOVE = 522;
     public User32 lib;
     private static HHOOK hhk;
     private MouseHookListener mouseHook;
@@ -36,11 +37,13 @@ public class MouseHook {
         }
 
     }
+
     //添加钩子监听
     public void addMouseHookListener(MouseHookListener mouseHook) {
         this.mouseHook = mouseHook;
         this.mouseHook.lib = lib;
     }
+
     //启动
     public void startWindowsHookEx() {
         if (isWindows) {
@@ -60,6 +63,7 @@ public class MouseHook {
         }
 
     }
+
     //关闭
     public void stopWindowsHookEx() {
         if (isWindows) {
@@ -68,16 +72,18 @@ public class MouseHook {
 
     }
 
+
     public static void main(String[] args) {
         try {
             MouseHook mouseHook = new MouseHook();
             mouseHook.addMouseHookListener(new MouseHookListener() {
                 //回调监听
                 public LRESULT callback(int nCode, WPARAM wParam, MouseHookStruct lParam) {
+                    long flag = 1;
                     if (nCode >= 0) {
                         switch (wParam.intValue()) {
                             case MouseHook.WM_MOUSEMOVE:
-                                System.err.println("mouse move, x=" + lParam.pt.x + " y=" + lParam.pt.y);
+//                                System.err.println("mouse move, x=" + lParam.pt.x + " y=" + lParam.pt.y);
                                 break;
                             case MouseHook.WM_LBUTTONDOWN:
                                 System.out.println("left  down");
@@ -96,6 +102,17 @@ public class MouseHook {
                                 break;
                             case MouseHook.WM_MBUTTONUP:
                                 System.out.println("middle up");
+                                break;
+                            case MouseHook.WM_WHEELMOVE:
+                                boolean down = Pointer.nativeValue(lParam.hwnd.getPointer()) == 4287102976L;
+                                if (down)
+                                    System.out.println("down");
+                                else System.out.println("up");
+
+                                //return new LRESULT(flag);  //关闭鼠标滚轮滚动功能
+                                break;
+                            default:
+                                System.out.println("Invalid operation");
                                 break;
                         }
                     }
@@ -116,3 +133,4 @@ public class MouseHook {
         }
     }
 }
+

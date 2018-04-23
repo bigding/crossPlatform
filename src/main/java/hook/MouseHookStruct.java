@@ -1,4 +1,4 @@
-package mouseHook;
+package hook;
 import java.util.Arrays;
 import java.util.List;
 
