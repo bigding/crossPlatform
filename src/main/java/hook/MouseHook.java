@@ -1,5 +1,6 @@
 package hook;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.*;
@@ -8,12 +9,17 @@ import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
 import com.sun.jna.platform.win32.WinUser.HHOOK;
 import com.sun.jna.platform.win32.WinUser.MSG;
+import common.ActionContainer;
+import org.apache.log4j.Logger;
 
 
 /**
  * 鼠标钩子
  */
 public class MouseHook {
+
+    private static Logger log4j = Logger.getLogger(MouseHook.class);
+
     //鼠标事件编码
     public static final int WM_MOUSEMOVE = 512;
     public static final int WM_LBUTTONDOWN = 513;
@@ -29,6 +35,12 @@ public class MouseHook {
     MouseHookListener hookListener;
     private static HHOOK hhk;
     private HMODULE hMod;
+
+    ActionContainer actionContainer;
+
+    public MouseHook(ActionContainer container){
+        actionContainer = container;
+    }
 
 
     public void startMouseHook() {
@@ -46,19 +58,49 @@ public class MouseHook {
 //                                return new LRESULT(flag);
                                 break;
                             case MouseHook.WM_LBUTTONDOWN:
-                                System.out.println("left  down");
+                                JSONObject lMousePress = new JSONObject();
+                                lMousePress.put("id", "2");
+                                lMousePress.put("press", 1);
+                                try {
+                                   actionContainer.offer(lMousePress);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add left mousePressed event to eventContainer fail");
+                                }
                                 return new LRESULT(flag);
 //                                break;
                             case MouseHook.WM_LBUTTONUP:
-                                System.out.println("left  up");
+                                JSONObject lMouseRelease = new JSONObject();
+                                lMouseRelease.put("id", "3");
+                                lMouseRelease.put("release", 1);
+                                try {
+//                log4j.info("mouseRelease:" + mouseRelease);
+                                    actionContainer.offer(lMouseRelease);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add left mouseReleased event to eventContainer fail");
+                                }
                                 return new LRESULT(flag);
 //                                break;
                             case MouseHook.WM_RBUTTONDOWN:
-                                System.out.println("right down");
+                                JSONObject rMousePress = new JSONObject();
+                                rMousePress.put("id", "2");
+                                rMousePress.put("press", 2);
+                                try {
+                                    actionContainer.offer(rMousePress);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add right mousePressed event to eventContainer fail");
+                                }
                                 return new LRESULT(flag);
 //                                break;
                             case MouseHook.WM_RBUTTONUP:
-                                System.out.println("right up");
+                                JSONObject rMouseRelease = new JSONObject();
+                                rMouseRelease.put("id", "3");
+                                rMouseRelease.put("release", 2);
+                                try {
+//                log4j.info("mouseRelease:" + mouseRelease);
+                                   actionContainer.offer(rMouseRelease);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add mouseReleased event to eventContainer fail");
+                                }
                                 return new LRESULT(flag);
 //                                break;
                             case MouseHook.WM_MBUTTONDOWN:
@@ -78,7 +120,7 @@ public class MouseHook {
                                 return new LRESULT(flag);  //关闭鼠标滚轮滚动功能
 //                                break;
                             default:
-                                System.out.println("Invalid operation");
+                                log4j.info("mouse hook:invalid operation");
                                 break;
                         }
                     }
@@ -110,7 +152,7 @@ public class MouseHook {
             MSG msg = new MSG();
             while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
                 if (result == -1) {
-                    System.err.println("err in get message");
+                    System.err.println("error in get message");
                     break;
                 } else {
                     System.err.println("got message");

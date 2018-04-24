@@ -36,7 +36,7 @@ public class ListenerTest
 
 
         MouseHook mouseHook = new MouseHook();
-        KeyHook keyHook = new KeyHook();
+        KeyHook keyHook = new KeyHook(motionContainer);
         Thread keyThread = new Thread(){
             @Override
             public void run() {
