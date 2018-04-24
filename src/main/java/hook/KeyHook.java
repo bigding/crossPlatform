@@ -22,7 +22,6 @@ public class KeyHook {
     HMODULE hMod;
 
     public void startKeyHook(){
-        System.out.println("Lib:"+lib);
         hMod = Kernel32.INSTANCE.GetModuleHandle(null);
         keyboardHook = new LowLevelKeyboardProc() {
             @Override
@@ -32,26 +31,26 @@ public class KeyHook {
                 if (nCode >= 0) {
                     switch(wParam.intValue()) {
                         case WinUser.WM_KEYUP:
-                            System.err.println("keyUp, key=" + info.vkCode);
+                            System.out.println("keyUp, key=" + info.vkCode);
                             break;
                         case WinUser.WM_KEYDOWN:
-                            System.err.println("keyDown, key=" + info.vkCode);
+                            System.out.println("keyDown, key=" + info.vkCode);
+                            if(info.vkCode == 81)
+                                quit = true;
                             break;
                         case WinUser.WM_SYSKEYUP:
-                            System.err.println("sysKeyUp, key=" + info.vkCode);
+                            System.out.println("sysKeyUp, key=" + info.vkCode);
                             break;
                         case WinUser.WM_SYSKEYDOWN:
-                            System.err.println("sysKeuDown, key=" + info.vkCode);
+                            System.out.println("sysKeuDown, key=" + info.vkCode);
                             break;
                     }
                 }
 
                 Pointer ptr = info.getPointer();
                 long peer = Pointer.nativeValue(ptr);
-                System.out.println("Libsjd:"+lib);
-                return lib.CallNextHookEx(hhk, nCode, wParam, new LPARAM(peer));
-
-//                return new LRESULT(flag);
+//                return lib.CallNextHookEx(hhk, nCode, wParam, new LPARAM(peer));
+                return new LRESULT(flag);
             }
         };
         hhk = lib.SetWindowsHookEx(WinUser.WH_KEYBOARD_LL, keyboardHook, hMod, 0);

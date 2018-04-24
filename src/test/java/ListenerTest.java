@@ -2,6 +2,8 @@ import com.sun.jna.Native;
 import com.sun.jna.win32.StdCallLibrary;
 import common.ActionContainer;
 import common.SystemInfo;
+import hook.KeyHook;
+import hook.MouseHook;
 import listener.GlobalDeviceListener;
 import net.Client;
 import net.Server;
@@ -30,6 +32,31 @@ public class ListenerTest
 
         GlobalDeviceListener listener = new GlobalDeviceListener();
         listener.startGlobalListener(motionContainer);
+        listener.changeHookStatus(true);
 
+
+        MouseHook mouseHook = new MouseHook();
+        KeyHook keyHook = new KeyHook();
+        Thread keyThread = new Thread(){
+            @Override
+            public void run() {
+                keyHook.startKeyHook();
+            }
+        };
+        Thread mouseThread = new Thread(){
+            @Override
+            public void run() {
+                mouseHook.startMouseHook();
+            }
+        };
+        keyThread.start();
+        mouseThread.start();
+        Thread.sleep(10000);
+        mouseHook.stopMouseHook();
+        keyHook.stopKeyHook();
+        listener.changeHookStatus(false);
+        listener.removeGlobalListener();
+        keyThread.interrupt();
+        mouseThread.interrupt();
     }
 }

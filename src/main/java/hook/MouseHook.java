@@ -43,33 +43,40 @@ public class MouseHook {
                         switch (wParam.intValue()) {
                             case MouseHook.WM_MOUSEMOVE:
 //                                System.err.println("mouse move, x=" + lParam.pt.x + " y=" + lParam.pt.y);
+//                                return new LRESULT(flag);
                                 break;
                             case MouseHook.WM_LBUTTONDOWN:
                                 System.out.println("left  down");
-                                break;
+                                return new LRESULT(flag);
+//                                break;
                             case MouseHook.WM_LBUTTONUP:
                                 System.out.println("left  up");
-                                break;
+                                return new LRESULT(flag);
+//                                break;
                             case MouseHook.WM_RBUTTONDOWN:
                                 System.out.println("right down");
-                                break;
+                                return new LRESULT(flag);
+//                                break;
                             case MouseHook.WM_RBUTTONUP:
                                 System.out.println("right up");
-                                break;
+                                return new LRESULT(flag);
+//                                break;
                             case MouseHook.WM_MBUTTONDOWN:
                                 System.out.println("middle down");
-                                break;
+                                return new LRESULT(flag);
+//                                break;
                             case MouseHook.WM_MBUTTONUP:
                                 System.out.println("middle up");
-                                break;
+                                return new LRESULT(flag);
+//                                break;
                             case MouseHook.WM_WHEELMOVE:
                                 boolean down = Pointer.nativeValue(lParam.hwnd.getPointer()) == 4287102976L;
                                 if (down)
                                     System.out.println("down");
                                 else System.out.println("up");
 
-                                //return new LRESULT(flag);  //关闭鼠标滚轮滚动功能
-                                break;
+                                return new LRESULT(flag);  //关闭鼠标滚轮滚动功能
+//                                break;
                             default:
                                 System.out.println("Invalid operation");
                                 break;

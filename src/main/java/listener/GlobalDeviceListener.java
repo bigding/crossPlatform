@@ -24,6 +24,9 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
 
     private static org.apache.log4j.Logger log4j = org.apache.log4j.Logger.getLogger(GlobalDeviceListener.class);
 
+    //isHooked 表示是否有键盘和鼠标钩子正在执行,如果在执行的话就只监听鼠标移动
+    //如果没有钩子正在执行,那么全部都监听
+    volatile boolean isHooked = false;
     public static  ActionContainer actionContainer;
 //    public  ActionContainer actionContainer = new ActionContainer();
     //注册全体监听器
@@ -34,37 +37,43 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseClicked(NativeMouseEvent e) {
-        JSONObject mouseClick = new JSONObject();
-        mouseClick.put("id","1");
-        mouseClick.put("clickCount",e.getClickCount());
-        try {
-            this.actionContainer.offer(mouseClick);
-        } catch (InterruptedException e1) {
-            log4j.error("add mouseChecked event to eventContainer fail");
+        if(!isHooked) {
+            JSONObject mouseClick = new JSONObject();
+            mouseClick.put("id", "1");
+            mouseClick.put("clickCount", e.getClickCount());
+            try {
+                this.actionContainer.offer(mouseClick);
+            } catch (InterruptedException e1) {
+                log4j.error("add mouseChecked event to eventContainer fail");
+            }
         }
     }
 
     public void nativeMousePressed(NativeMouseEvent e) {
-        JSONObject mousePress = new JSONObject();
-        mousePress.put("id","2");
-        mousePress.put("press",e.getButton());
-        try {
-            log4j.info("mousePress:"+mousePress);
-            this.actionContainer.offer(mousePress);
-        } catch (InterruptedException e1) {
-            log4j.error("add mousePressed event to eventContainer fail");
+        if(!isHooked) {
+            JSONObject mousePress = new JSONObject();
+            mousePress.put("id", "2");
+            mousePress.put("press", e.getButton());
+            try {
+//                log4j.info("mousePress:" + mousePress);
+                this.actionContainer.offer(mousePress);
+            } catch (InterruptedException e1) {
+                log4j.error("add mousePressed event to eventContainer fail");
+            }
         }
     }
 
     public void nativeMouseReleased(NativeMouseEvent e) {
-        JSONObject mouseRelease = new JSONObject();
-        mouseRelease.put("id","3");
-        mouseRelease.put("release",e.getButton());
-        try {
-            log4j.info("mouseRelease:"+mouseRelease);
-            this.actionContainer.offer(mouseRelease);
-        } catch (InterruptedException e1) {
-            log4j.error("add mouseReleased event to eventContainer fail");
+        if(!isHooked) {
+            JSONObject mouseRelease = new JSONObject();
+            mouseRelease.put("id", "3");
+            mouseRelease.put("release", e.getButton());
+            try {
+//                log4j.info("mouseRelease:" + mouseRelease);
+                this.actionContainer.offer(mouseRelease);
+            } catch (InterruptedException e1) {
+                log4j.error("add mouseReleased event to eventContainer fail");
+            }
         }
     }
 
@@ -73,7 +82,7 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         mouseMove.put("id","4");
         mouseMove.put("posiX",e.getX());
         mouseMove.put("posiY",e.getY());
-        log4j.info(mouseMove);
+//        log4j.info(mouseMove);
         try {
             this.actionContainer.offer(mouseMove);
         } catch (InterruptedException e1) {
@@ -82,70 +91,80 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
     }
 
     public void nativeMouseDragged(NativeMouseEvent e) {
-        JSONObject mouseDrag = new JSONObject();
-        mouseDrag.put("id","5");
-        mouseDrag.put("posiX",e.getX());
-        mouseDrag.put("posiY",e.getY());
-        try {
-            this.actionContainer.offer(mouseDrag);
-        } catch (InterruptedException e1) {
-            log4j.error("add mouseDragged event to eventContainer fail");
+        if(!isHooked) {
+            JSONObject mouseDrag = new JSONObject();
+            mouseDrag.put("id", "5");
+            mouseDrag.put("posiX", e.getX());
+            mouseDrag.put("posiY", e.getY());
+            try {
+                this.actionContainer.offer(mouseDrag);
+            } catch (InterruptedException e1) {
+                log4j.error("add mouseDragged event to eventContainer fail");
+            }
         }
     }
 
     public void nativeMouseWheelMoved(NativeMouseWheelEvent e) {
-        JSONObject mouseWhellMove = new JSONObject();
-        mouseWhellMove.put("id","6");
-        mouseWhellMove.put("wheelRotation",e.getWheelRotation());
-        try {
-            this.actionContainer.offer(mouseWhellMove);
-        } catch (InterruptedException e1) {
-            log4j.error("add mouseWheelMoved event to eventContainer fail");
+        if(!isHooked) {
+            JSONObject mouseWhellMove = new JSONObject();
+            mouseWhellMove.put("id", "6");
+            mouseWhellMove.put("wheelRotation", e.getWheelRotation());
+            try {
+                this.actionContainer.offer(mouseWhellMove);
+            } catch (InterruptedException e1) {
+                log4j.error("add mouseWheelMoved event to eventContainer fail");
+            }
         }
     }
 
     public void nativeKeyPressed(NativeKeyEvent e) {
-        int keyCode = Key.getKeyText(e.getKeyCode());
-        if(keyCode != -1) {
-            JSONObject keyPress = new JSONObject();
-            keyPress.put("id", "7");
+        if(!isHooked) {
+            int keyCode = Key.getKeyText(e.getKeyCode());
+            if (keyCode != -1) {
+                JSONObject keyPress = new JSONObject();
+                keyPress.put("id", "7");
 //            keyPress.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
-            keyPress.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
-            try {
-                this.actionContainer.offer(keyPress);
-            } catch (InterruptedException e1) {
-                log4j.error("add keyPressed event to eventContainer fail");
+                keyPress.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+                try {
+                    this.actionContainer.offer(keyPress);
+                } catch (InterruptedException e1) {
+                    log4j.error("add keyPressed event to eventContainer fail");
+                }
             }
         }
     }
 
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-        int keyCode = Key.getKeyText(e.getKeyCode());
-        if(keyCode != -1) {
-            JSONObject keyRelease = new JSONObject();
-            keyRelease.put("id", "8");
+        if(!isHooked) {
+            int keyCode = Key.getKeyText(e.getKeyCode());
+            if (keyCode != -1) {
+                JSONObject keyRelease = new JSONObject();
+                keyRelease.put("id", "8");
 //            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
-            keyRelease.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
-            try {
-                this.actionContainer.offer(keyRelease);
-            } catch (InterruptedException e1) {
-                log4j.error("add keyReleased event to eventContainer fail");
+                keyRelease.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+                try {
+                    this.actionContainer.offer(keyRelease);
+                } catch (InterruptedException e1) {
+                    log4j.error("add keyReleased event to eventContainer fail");
+                }
             }
         }
     }
 
     public void nativeKeyTyped(NativeKeyEvent e) {
-        int keyCode = Key.getKeyText(e.getKeyCode());
-        if(keyCode != -1) {
-            JSONObject keyType = new JSONObject();
-            keyType.put("id", "9");
+        if(!isHooked) {
+            int keyCode = Key.getKeyText(e.getKeyCode());
+            if (keyCode != -1) {
+                JSONObject keyType = new JSONObject();
+                keyType.put("id", "9");
 //            keyType.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
-            keyType.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
-            try {
-                this.actionContainer.offer(keyType);
-            } catch (InterruptedException e1) {
-                log4j.error("add keyTyped event to eventContainer fail");
+                keyType.put("keyCode", keyCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+                try {
+                    this.actionContainer.offer(keyType);
+                } catch (InterruptedException e1) {
+                    log4j.error("add keyTyped event to eventContainer fail");
+                }
             }
         }
     }
@@ -184,5 +203,12 @@ public class GlobalDeviceListener implements NativeMouseInputListener, NativeKey
         GlobalScreen.removeNativeKeyListener(globalDeviceListener);
         GlobalScreen.removeNativeMouseMotionListener(globalDeviceListener);
         GlobalScreen.removeNativeMouseListener(globalDeviceListener);
+    }
+
+    /**
+     * 改变isHooked标志位的状态
+     */
+    public void changeHookStatus(boolean flag){
+        isHooked = flag;
     }
 }
