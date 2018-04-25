@@ -1,6 +1,5 @@
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import motionSimulation.DisableMotion;
 
 public class HookTest {
     public interface  Hook extends Library{

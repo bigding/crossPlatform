@@ -38,6 +38,8 @@ public class MouseHook {
 
     ActionContainer actionContainer;
 
+
+    public MouseHook(){}
     public MouseHook(ActionContainer container){
         actionContainer = container;
     }
@@ -122,9 +124,19 @@ public class MouseHook {
                                 return new LRESULT(flag);
                             case MouseHook.WM_WHEELMOVE:
                                 boolean down = Pointer.nativeValue(lParam.hwnd.getPointer()) == 4287102976L;
-                                if (down)
-                                    System.out.println("down");
-                                else System.out.println("up");
+                                JSONObject mouseWheelMove = new JSONObject();
+                                mouseWheelMove.put("id", "6");
+                                if (down){
+                                    mouseWheelMove.put("wheelRotation", -1);
+                                }
+                                else{
+                                    mouseWheelMove.put("wheelRotation", 1);
+                                }
+                                try {
+                                    actionContainer.offer(mouseWheelMove);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add wheel move event to eventContainer fail");
+                                }
 
                                 return new LRESULT(flag);  //关闭鼠标滚轮滚动功能
 //                                break;
