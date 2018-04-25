@@ -90,27 +90,36 @@ public class MouseHook {
                                     log4j.error("add right mousePressed event to eventContainer fail");
                                 }
                                 return new LRESULT(flag);
-//                                break;
                             case MouseHook.WM_RBUTTONUP:
                                 JSONObject rMouseRelease = new JSONObject();
                                 rMouseRelease.put("id", "3");
                                 rMouseRelease.put("release", 2);
                                 try {
-//                log4j.info("mouseRelease:" + mouseRelease);
                                    actionContainer.offer(rMouseRelease);
                                 } catch (InterruptedException e1) {
-                                    log4j.error("add mouseReleased event to eventContainer fail");
+                                    log4j.error("add right mouseReleased event to eventContainer fail");
                                 }
                                 return new LRESULT(flag);
-//                                break;
                             case MouseHook.WM_MBUTTONDOWN:
-                                System.out.println("middle down");
+                                JSONObject mMousePress = new JSONObject();
+                                mMousePress.put("id", "2");
+                                mMousePress.put("press", 3);
+                                try {
+                                    actionContainer.offer(mMousePress);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add middle mousePressed event to eventContainer fail");
+                                }
                                 return new LRESULT(flag);
-//                                break;
                             case MouseHook.WM_MBUTTONUP:
-                                System.out.println("middle up");
+                                JSONObject mMouseRelease = new JSONObject();
+                                mMouseRelease.put("id", "3");
+                                mMouseRelease.put("release", 3);
+                                try {
+                                    actionContainer.offer(mMouseRelease);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add middle mouseReleased event to eventContainer fail");
+                                }
                                 return new LRESULT(flag);
-//                                break;
                             case MouseHook.WM_WHEELMOVE:
                                 boolean down = Pointer.nativeValue(lParam.hwnd.getPointer()) == 4287102976L;
                                 if (down)

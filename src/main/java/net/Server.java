@@ -1,17 +1,12 @@
 package net;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import common.ActionContainer;
 import common.SystemInfo;
-import listener.GlobalDeviceListener;
 import org.apache.log4j.Logger;
-import org.jnativehook.GlobalScreen;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Server extends Thread {
@@ -22,7 +17,7 @@ public class Server extends Thread {
 
     Thread serverReadThread,serverWriteThread,waitStartListenerThread;
     ServerSocket serverSocket = null;
-    ActionContainer serverActionContainer,motionContainer;
+    ActionContainer serverActionContainer,mouseMoveContainer;
     ConcurrentHashMap <String, SystemInfo> clientMap;
     static volatile Server server = null;
 
@@ -55,10 +50,10 @@ public class Server extends Thread {
     }
 
     public void startServer(ActionContainer serverActionContainer,
-                            ActionContainer motionContainer,
+                            ActionContainer mouseMoveContainer,
                             ConcurrentHashMap<String, SystemInfo> clientMap){
         this.serverActionContainer = serverActionContainer;
-        this.motionContainer = motionContainer;
+        this.mouseMoveContainer = mouseMoveContainer;
         this.clientMap = clientMap;
         start();  //启动线程监听客户端响应
     }
@@ -81,7 +76,7 @@ public class Server extends Thread {
                 Socket client = serverSocket.accept();
                 //新建一个线程等待,当客户端系统信息传输到服务端后,开启服务器端的全局监听器,
                 // 并将监听器监听到的消息存放在专用的容器中,并且开启处理鼠标键盘信息的线程
-                waitStartListenerThread = new Thread(new StartListenerThread(motionContainer,serverActionContainer,clientMap));
+                waitStartListenerThread = new Thread(new StartListenerThread(mouseMoveContainer,serverActionContainer,clientMap));
                 //一个客户端连接就开两个线程分别处理读和写
                 serverReadThread = new Thread(new ServerReadHandlerThread(client,clientMap));
                 serverWriteThread = new Thread(new ServerWriteHandlerThread(client,serverActionContainer));

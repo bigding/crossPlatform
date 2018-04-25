@@ -4,11 +4,11 @@ Mouse Clicked{
 }
 Mouse Pressed{
 ****    id:2
-    press:1/2    # 1为点击鼠标左键,2为点击鼠标右键
+    press:1/2/3    # 1为点击鼠标左键,2为点击鼠标右键,3为鼠标中键
 }
 Mouse Released{
     id:3
-    release:1/2  # 同上
+    release:1/2/3  # 同上
 }
 Mouse Moved{
     id:4

@@ -16,14 +16,14 @@ public class Test {
 //        mThread.interrupt();
 
 
-        KeyHook keyHook = new KeyHook();
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                keyHook.startKeyHook();
-            }
-        };
-        thread.start();
+//        KeyHook keyHook = new KeyHook();
+//        Thread thread = new Thread(){
+//            @Override
+//            public void run() {
+//                keyHook.startKeyHook();
+//            }
+//        };
+//        thread.start();
 //        Thread.sleep(10000);
 //        keyHook.stopKeyHook();
 //        thread.interrupt();

@@ -3,6 +3,7 @@ package control;
 import com.alibaba.fastjson.JSONObject;
 import common.ActionContainer;
 import common.SystemInfo;
+import hook.HookControl;
 import motionSimulation.MouseMotion;
 import org.apache.log4j.Logger;
 
@@ -16,18 +17,19 @@ public class DeviceMotionConvert implements Runnable {
     private static Logger log4j = Logger.getLogger(DeviceMotionConvert.class);
 
     SystemInfo serverSysInfo = SystemInfo.getInstance();
-    ActionContainer motionContainer, serverActionContainer;
+    ActionContainer mouseMoveContainer, serverActionContainer;
     ConcurrentHashMap<String, SystemInfo> clientMap;
     int clientScreenWidth, clientScreenHeight;
     int serverScreenWidth, serverScreenHeight;
     int clientMouseX, clientMouseY;
     int serverMouseX, serverMouseY;
+    HookControl hookControl;
 
 
-    public DeviceMotionConvert(ActionContainer motionContainer,
+    public DeviceMotionConvert(ActionContainer mouseMoveContainer,
                                ActionContainer serverActionContainer,
                                ConcurrentHashMap<String, SystemInfo> clientMap) {
-        this.motionContainer = motionContainer;
+        this.mouseMoveContainer = mouseMoveContainer;
         this.serverActionContainer = serverActionContainer;
         this.clientMap = clientMap;
 
@@ -37,6 +39,9 @@ public class DeviceMotionConvert implements Runnable {
 
         this.serverScreenWidth = serverSysInfo.getOsScreenWidth();
         this.serverScreenHeight = serverSysInfo.getOsSCreenHeight();
+
+        //初始化HookControl
+        hookControl = new HookControl(serverActionContainer);
     }
 
     //当鼠标位置在两台机器间变化时,纵坐标的变化值转换函数,posiY的转换为A->B
@@ -63,9 +68,9 @@ public class DeviceMotionConvert implements Runnable {
         int mouseAt = 1;   //当为1时,鼠标在服务器机;当为2时,鼠标在客户机
         int[] mousePosi = new int[2];  //存储前一刻鼠标的位置
         while (true) {
-            if (!motionContainer.isEmpty()) {
+            if (!mouseMoveContainer.isEmpty()) {
                 try {
-                    JSONObject action = motionContainer.poll();
+                    JSONObject action = mouseMoveContainer.poll();
                     String id = action.getString("id");
                     /**
                      *具体每个判断对应的情况,参考 about.md
@@ -78,6 +83,7 @@ public class DeviceMotionConvert implements Runnable {
                         if (mouseAt == 1) {
                             if (serverMouseX == 0) {
                                 //将部分监听权交给hook, 并将服务器机鼠标光标隐藏,禁用鼠标点击,禁用键盘输入
+                                hookControl.startHook();
                                 mouseAt = 2;
                                 clientMouseX = clientScreenWidth;
                                 clientMouseY = posiYChange(serverScreenHeight, clientScreenHeight, serverMouseY);
@@ -135,25 +141,9 @@ public class DeviceMotionConvert implements Runnable {
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
                                 //显示服务器机鼠标光标并移动到指定位置
                                 //同时回复正常监听
+                                hookControl.stopHook();
                                 MouseMotion.moveTo(serverMouseX, serverMouseY);
                             }
-                        }
-                    }
-                    //当鼠标光标正在客户机时,才将除了鼠标移动以外的信息传输到客户机
-                    if (mouseAt == 2) {
-                        if ("1".equals(id)) {
-                            //鼠标点击次数?  不知道怎么处理,暂不处理
-                        } else if ("2".equals(id) || "3".equals(id) || "6".equals(id) ||
-                                "7".equals(id) || "8".equals(id)) {
-                            serverActionContainer.offer(action);
-                        } else if ("4".equals(id)) {
-                            //不处理 上面已经经行了处理
-                        } else if ("5".equals(id)) {
-                            //鼠标拖拽,暂不处理
-                        } else if ("9".equals(id)) {
-                            //键盘键入,不知道怎么处理 暂不处理
-                        } else {
-                            log4j.warn("meaningless motion conversion:" + id);
                         }
                     }
                 } catch (InterruptedException e) {

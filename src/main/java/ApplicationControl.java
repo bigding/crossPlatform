@@ -20,18 +20,18 @@ public class ApplicationControl {
      */
     public static void main(String[] args) {
         if("1".equals(args[0])){
-            ActionContainer motionContainer = new ActionContainer(); //用于存储主设备动作的信息
+            ActionContainer mouseMoveContainer = new ActionContainer(); //用于存储主设备动作的信息
             ActionContainer serverActionContainer = new ActionContainer();   //服务器端设备的动作信息 以及控制信息
             ConcurrentHashMap<String, SystemInfo> clientMap= new ConcurrentHashMap <>();
 
             if(args.length == 1){
                 Server server = Server.getServer();                              //单例模式获取Server
-                server.startServer(serverActionContainer,motionContainer,clientMap);
+                server.startServer(serverActionContainer,mouseMoveContainer,clientMap);
             }
             else if(args.length == 2){
                 try {
                     Server server = Server.getServer(Integer.valueOf(args[1]));
-                    server.startServer(serverActionContainer,motionContainer,clientMap);                         //单例模式获取Server
+                    server.startServer(serverActionContainer,mouseMoveContainer,clientMap);                         //单例模式获取Server
                 }
                 catch (NumberFormatException e){
                     System.out.println("invalid input parameter.");

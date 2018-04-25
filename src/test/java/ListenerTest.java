@@ -1,14 +1,7 @@
-import com.sun.jna.Native;
-import com.sun.jna.win32.StdCallLibrary;
 import common.ActionContainer;
-import common.SystemInfo;
 import hook.KeyHook;
 import hook.MouseHook;
-import listener.GlobalDeviceListener;
-import net.Client;
-import net.Server;
-
-import java.util.concurrent.ConcurrentHashMap;
+import listener.GlobalMouseListener;
 
 public class ListenerTest
 {
@@ -30,12 +23,11 @@ public class ListenerTest
             }
         }.start();
 
-        GlobalDeviceListener listener = new GlobalDeviceListener();
+        GlobalMouseListener listener = new GlobalMouseListener();
         listener.startGlobalListener(motionContainer);
-        listener.changeHookStatus(true);
 
 
-        MouseHook mouseHook = new MouseHook();
+        MouseHook mouseHook = new MouseHook(motionContainer);
         KeyHook keyHook = new KeyHook(motionContainer);
         Thread keyThread = new Thread(){
             @Override
@@ -54,7 +46,6 @@ public class ListenerTest
         Thread.sleep(10000);
         mouseHook.stopMouseHook();
         keyHook.stopKeyHook();
-        listener.changeHookStatus(false);
         listener.removeGlobalListener();
         keyThread.interrupt();
         mouseThread.interrupt();
