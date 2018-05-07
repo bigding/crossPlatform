@@ -60,10 +60,10 @@ public class MouseMotion {
     
 
     public static void up() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseUp();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousemove_relative -- 0 -1";
             Shell.callShell(shellStr);
         }else{
@@ -72,10 +72,10 @@ public class MouseMotion {
     }
 
     public static void down() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseDown();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousemove_relative  0 1";
             Shell.callShell(shellStr);
         }else{
@@ -84,10 +84,10 @@ public class MouseMotion {
     }
 
     public static void left() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseLeft();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousemove_relative -- -1 0";
             Shell.callShell(shellStr);
         }else{
@@ -96,10 +96,10 @@ public class MouseMotion {
     }
 
     public static void right() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseRight();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousemove_relative  1 0";
             Shell.callShell(shellStr);
 
@@ -109,10 +109,10 @@ public class MouseMotion {
     }
 
     public static void moveTo(int horizontal, int vertical) {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseMoveTo(horizontal, vertical);
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousemove "+horizontal+" "+vertical;
             Shell.callShell(shellStr);
         }else{
@@ -121,10 +121,10 @@ public class MouseMotion {
     }
 
     public static void moveBy(int horizontal, int vertical) {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseMoveBy(horizontal, vertical);
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr;
             if(horizontal < 0 || vertical < 0) {
                 shellStr = "xdotool mousemove_relative -- "+horizontal+" "+vertical;
@@ -139,10 +139,10 @@ public class MouseMotion {
     }
 
     public static void leftDown() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseLeftDown();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousedown 1";
             Shell.callShell(shellStr);
         }else{
@@ -151,10 +151,10 @@ public class MouseMotion {
     }
 
     public static void leftUp() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseLeftUp();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mouseup 1";
             Shell.callShell(shellStr);
         }else{
@@ -163,10 +163,10 @@ public class MouseMotion {
     }
 
     public static void rightDown() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseRightDown();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mousedown 3";
             Shell.callShell(shellStr);
         }else{
@@ -175,10 +175,10 @@ public class MouseMotion {
     }
 
     public static void rightUp() {
-        if (osType == 1) {
+        if (osType == 0) {
             Mouse.INSTANCE.mouseRightUp();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mouseup 3";
             Shell.callShell(shellStr);
         }else{
@@ -187,10 +187,10 @@ public class MouseMotion {
     }
 
     public static void middleDown() {
-        if(osType == 1) {
+        if(osType == 0) {
             Mouse.INSTANCE.mouseMiddleDown();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
 
             String shellStr = "xdotool mousedown 2";
             Shell.callShell(shellStr);
@@ -200,10 +200,10 @@ public class MouseMotion {
     }
 
     public static void middleUp() {
-        if(osType == 1) {
+        if(osType == 0) {
             Mouse.INSTANCE.mouseMiddleUp();
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             String shellStr = "xdotool mouseup 2";
             Shell.callShell(shellStr);
 
@@ -213,10 +213,10 @@ public class MouseMotion {
     }
 
     public static void wheelRotate(int distance) {
-        if(osType == 1) {
+        if(osType == 0) {
             Mouse.INSTANCE.mouseWheelRotate(distance);
         }
-        else if (osType == 0) {
+        else if (osType == 1) {
             if(distance > 0){
                 String shellStr = "xdotool mouseup 4";
                 Shell.callShell(shellStr);

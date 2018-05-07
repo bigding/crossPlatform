@@ -98,16 +98,39 @@ public class DeviceMotionConvert implements Runnable {
                                 //使光标位于服务器机屏幕中央
                                 mousePosi[0] = serverScreenWidth/2;
                                 mousePosi[1] = serverScreenHeight/2;
+                                log4j.info("posi1:"+mousePosi[0]+"\t"+mousePosi[1]);
+                                log4j.info("debug1:"+mouseAt+ "\t"+serverMouseX+"\t"+serverMouseY+
+                                        "\t"+clientMouseX+"\t"+clientMouseY);
                                 MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                         }
                         //鼠标的光标在客户机时,处理鼠标移动信息和到达边缘时光标所在处的变换
                         else if (mouseAt == 2) {
+                            if(serverMouseX <= 0){
+                                continue;
+                            }
+
+                            //下面对x，y值的判断是为了防止绝对值超过一百的情况
                             int x = serverMouseX - mousePosi[0];
+                            if(x > 100){
+                                x -= 100;
+                            }
+                            else if(x < -100){
+                                x += 100;
+                            }
                             int y = serverMouseY - mousePosi[1];
+                            if(y > 100){
+                                y -= 100;
+                            }
+                            else if(y < -100){
+                                y += 100;
+                            }
 
                             clientMouseX = clientMouseX + x;
                             clientMouseY = clientMouseY + y;
+                            log4j.info("posi2:"+mousePosi[0]+"\t"+mousePosi[1]);
+                            log4j.info("debug2:"+mouseAt+"\t"+x+"\t"+y + "\t"+serverMouseX+"\t"+
+                                    serverMouseY+"\t"+clientMouseX+"\t"+clientMouseY);
                             //客户机屏幕上边缘
                             if (clientMouseY < 0) {
                                 clientMouseY = 0;
@@ -132,7 +155,29 @@ public class DeviceMotionConvert implements Runnable {
                             serverActionContainer.offer(jsonMouseMotion);
 
                             if (clientMouseX != clientScreenWidth) {
-                                MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
+                                //鼠标在主机上的活动范围为以屏幕中心为中心，长度为200px的正方形
+                                boolean status = false;
+                                mousePosi[0] = serverMouseX;
+                                mousePosi[1] = serverMouseY;
+                                if(serverMouseX - serverScreenWidth/2 > 100){
+                                    mousePosi[0] = serverMouseX -100;
+                                    status = true;
+                                }
+                                else if(serverMouseX - serverScreenWidth/2 < -100){
+                                    mousePosi[0] = serverMouseX + 100;
+                                    status = true;
+                                }
+                                if(serverMouseY - serverScreenHeight/2 > 100){
+                                    mousePosi[1] = serverMouseY - 100;
+                                    status = true;
+                                }
+                                else if(serverMouseY - serverScreenHeight/2 < -100){
+                                    mousePosi[1] = serverMouseY + 100;
+                                    status = true;
+                                }
+                                if(status){
+                                    MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
+                                }
                             }
                             //鼠标到达客户端的最右端,鼠标移交给服务器机
                             else {
@@ -141,7 +186,7 @@ public class DeviceMotionConvert implements Runnable {
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
                                 //显示服务器机鼠标光标并移动到指定位置
                                 //同时回复正常监听
-                                hookControl.stopHook();
+//                                hookControl.stopHook();
                                 MouseMotion.moveTo(serverMouseX, serverMouseY);
                             }
                         }

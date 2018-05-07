@@ -41,6 +41,7 @@ class ServerWriteHandlerThread implements Runnable{
                     JSONObject action = null;
                     try {
                         action = serverActionContainer.poll();
+                        log4j.info(action);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

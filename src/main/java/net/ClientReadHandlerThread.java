@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
@@ -28,7 +29,11 @@ class ClientReadHandlerThread implements Runnable{
         try {
             while(true){
                 //读取服务器端传来的数据
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                InputStream inputStream = client.getInputStream();
+//                if(inputStream.available() == 0){
+//
+//                }
+                in = new BufferedReader(new InputStreamReader(inputStream));
                 String inStr = in.readLine();
                 //可能因为网络状况等原因 传输的数据会出现错误,要对接收到的数据严格验证,不合要求的数据直接抛弃
                 if(inStr == ""|| inStr.isEmpty()) {

@@ -49,7 +49,7 @@ public class Server extends Thread {
         return server;
     }
 
-    public void startServer(ActionContainer serverActionContainer,
+    public void  startServer(ActionContainer serverActionContainer,
                             ActionContainer mouseMoveContainer,
                             ConcurrentHashMap<String, SystemInfo> clientMap){
         this.serverActionContainer = serverActionContainer;
