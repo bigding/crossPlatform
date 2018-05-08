@@ -46,6 +46,7 @@ public class MouseHook {
 
 
     public void startMouseHook() {
+        log4j.info("start mouse hook");
 //        try {
             hMod = Kernel32.INSTANCE.GetModuleHandle(null);
             hookListener = new MouseHookListener() {
@@ -147,7 +148,7 @@ public class MouseHook {
                     }
                     //将钩子信息传递到当前钩子链中的下一个子程，一个钩子程序可以调用这个函数之前或之后处理钩子信息
                     //hhk：当前钩子的句柄
-                    //nCode ：钩子代码; 就是给下一个钩子要交待的，钩传递给当前Hook过程的代码。下一个钩子程序使用此代码，以确定如何处理钩的信息。
+                    //nCode ：钩子代码; 就是给下一个要交待的，钩传递给当前Hook过程的代码。下一个钩子程序使用此代码，以确定如何处理钩的信息。
                     //wParam：要传递的参数; 由钩子类型决定是什么参数，此参数的含义取决于当前的钩链与钩的类型。
                     //lParam：Param的值传递给当前Hook过程。此参数的含义取决于当前的钩链与钩的类型。
                     return lib.CallNextHookEx(hhk, nCode, wParam, lParam.getPointer());
@@ -164,8 +165,8 @@ public class MouseHook {
                         } catch (Exception e) {
                         }
                     }
+                    log4j.info("exit mouse hook.");
                     lib.UnhookWindowsHookEx(hhk);
-                    System.exit(0);
                 }
             }.start();
 

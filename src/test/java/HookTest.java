@@ -1,20 +1,38 @@
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import common.ActionContainer;
+import hook.HookControl;
 
 public class HookTest {
-    public interface  Hook extends Library{
-        Hook INSTANCE = (Hook) Native.loadLibrary("lib/x64/Hook",Hook.class);
-        public void FuncEndHook();
-        public void FuncHookDevice();
-    }
+    public static ActionContainer serverActionContainer = new ActionContainer();
 
     public static void main(String[] args) throws InterruptedException {
-        Hook.INSTANCE.FuncHookDevice();
-        for (int i = 0; i < 10; i++) {
-            Thread.sleep(1000);
-            System.out.println(i);
-        }
-        Hook.INSTANCE.FuncEndHook();
-//        WinEventInterceptor.setKeyDisable();
+        HookControl hookControl = new HookControl(serverActionContainer);
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println("1");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        th.start();
+        new Thread() {
+            @Override
+            public void run() {
+                hookControl.startHook();
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                hookControl.stopHook();
+            }
+        }.start();
     }
 }

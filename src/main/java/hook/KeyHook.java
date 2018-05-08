@@ -30,12 +30,14 @@ public class KeyHook {
 
     ActionContainer actionContainer = new ActionContainer();
 
+    public KeyHook(){}
     public KeyHook(ActionContainer container){
         actionContainer = container;
     }
 
 
     public void startKeyHook(){
+        log4j.info("start key hook.");
         hMod = Kernel32.INSTANCE.GetModuleHandle(null);
         keyboardHook = new LowLevelKeyboardProc() {
             @Override
@@ -49,6 +51,10 @@ public class KeyHook {
                             keyRelease.put("id", "8");
 //            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
                             keyRelease.put("keyCode", info.vkCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+                            //按q退出 调试小后门
+//                            if(info.vkCode == 81){
+//                                quit = true;
+//                            }
                             try {
                                 actionContainer.offer(keyRelease);
                             } catch (InterruptedException e1) {
@@ -89,9 +95,8 @@ public class KeyHook {
                 while (!quit) {
                     try { Thread.sleep(10); } catch(Exception e) { }
                 }
-                log4j.info("exit key hook success.");
+                log4j.info("exit key hook.");
                 lib.UnhookWindowsHookEx(hhk);
-                System.exit(0);
             }
         }.start();
 

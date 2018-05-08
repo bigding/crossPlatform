@@ -32,7 +32,7 @@ public class HookControl {
     public void stopHook(){
         mouseHook.stopMouseHook();
         keyHook.stopKeyHook();
-//        keyThread.interrupt();
-//        mouseThread.interrupt();
+        keyThread.interrupt();
+        mouseThread.interrupt();
     }
 }

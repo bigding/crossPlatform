@@ -99,7 +99,7 @@ public class SystemInfo {
         System.out.println("user_home:"+props.getProperty("user.home"));
         System.out.println("user_directory:"+props.getProperty("user.dir"));
         System.out.println("screen_width:"+this.osScreenWidth);
-        System.out.println("screen_height"+this.osScreenHeight);
+        System.out.println("screen_height:"+this.osScreenHeight);
     }
 
     /**

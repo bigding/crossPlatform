@@ -85,7 +85,7 @@ public class DeviceMotionConvert implements Runnable {
                                 //将部分监听权交给hook, 并将服务器机鼠标光标隐藏,禁用鼠标点击,禁用键盘输入
                                 hookControl.startHook();
                                 mouseAt = 2;
-                                clientMouseX = clientScreenWidth;
+                                clientMouseX = clientScreenWidth -1;
                                 clientMouseY = posiYChange(serverScreenHeight, clientScreenHeight, serverMouseY);
 
                                 JSONObject jsonMouseMotion = new JSONObject();
@@ -128,9 +128,6 @@ public class DeviceMotionConvert implements Runnable {
 
                             clientMouseX = clientMouseX + x;
                             clientMouseY = clientMouseY + y;
-                            log4j.info("posi2:"+mousePosi[0]+"\t"+mousePosi[1]);
-                            log4j.info("debug2:"+mouseAt+"\t"+x+"\t"+y + "\t"+serverMouseX+"\t"+
-                                    serverMouseY+"\t"+clientMouseX+"\t"+clientMouseY);
                             //客户机屏幕上边缘
                             if (clientMouseY < 0) {
                                 clientMouseY = 0;
@@ -147,6 +144,9 @@ public class DeviceMotionConvert implements Runnable {
                             if (clientMouseX > clientScreenWidth) {
                                 clientMouseX = clientScreenWidth;
                             }
+                            log4j.info("posi2:"+mousePosi[0]+"\t"+mousePosi[1]);
+                            log4j.info("debug2:"+mouseAt+"\t"+x+"\t"+y + "\t"+serverMouseX+"\t"+
+                                    serverMouseY+"\t"+clientMouseX+"\t"+clientMouseY);
 
                             JSONObject jsonMouseMotion = new JSONObject();
                             jsonMouseMotion.put("id", "to");
@@ -160,7 +160,7 @@ public class DeviceMotionConvert implements Runnable {
                                 mousePosi[0] = serverMouseX;
                                 mousePosi[1] = serverMouseY;
                                 if(serverMouseX - serverScreenWidth/2 > 100){
-                                    mousePosi[0] = serverMouseX -100;
+                                    mousePosi[0] = serverMouseX - 100;
                                     status = true;
                                 }
                                 else if(serverMouseX - serverScreenWidth/2 < -100){
@@ -181,13 +181,17 @@ public class DeviceMotionConvert implements Runnable {
                             }
                             //鼠标到达客户端的最右端,鼠标移交给服务器机
                             else {
+                                log4j.info("x is 1366?? "+clientMouseX+"\t"+ clientScreenWidth);
                                 mouseAt = 1;
                                 serverMouseX = 1;
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
                                 //显示服务器机鼠标光标并移动到指定位置
                                 //同时回复正常监听
-//                                hookControl.stopHook();
+                                hookControl.stopHook();
                                 MouseMotion.moveTo(serverMouseX, serverMouseY);
+                                //初始化客户机鼠标位置,鼠标在客户机最右侧会影响后续判断
+                                clientMouseY = 0;
+                                clientMouseX = 0;
                             }
                         }
                     }
