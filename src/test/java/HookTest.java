@@ -8,31 +8,16 @@ public class HookTest {
 
     public static void main(String[] args) throws InterruptedException {
         HookControl hookControl = new HookControl(serverActionContainer);
-        Thread th = new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(1000);
-                        System.out.println("1");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        th.start();
-        new Thread() {
-            @Override
-            public void run() {
-                hookControl.startHook();
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                hookControl.stopHook();
-            }
-        }.start();
+        hookControl.startHook();
+        Thread.sleep(5000);
+        hookControl.stopHook();
+        System.out.println("aa:"+hookControl.isStop());
+        Thread.sleep(5000);
+        System.out.println("bb:"+hookControl.isStop());
+        System.out.println("once again");
+        hookControl.startHook();
+        Thread.sleep(5000);
+        hookControl.stopHook();
+        System.out.println("cc:"+hookControl.isStop());
     }
 }

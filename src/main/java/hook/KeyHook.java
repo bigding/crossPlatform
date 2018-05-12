@@ -42,6 +42,7 @@ public class KeyHook {
         keyboardHook = new LowLevelKeyboardProc() {
             @Override
             public LRESULT callback(int nCode, WPARAM wParam, KBDLLHOOKSTRUCT info) {
+                System.out.println("in key");
 //                lib = User32.INSTANCE;
                 long flag = 1;
                 if (nCode >= 0) {
@@ -114,7 +115,7 @@ public class KeyHook {
                 lib.DispatchMessage(msg);
             }
         }
-        lib.UnhookWindowsHookEx(hhk);
+//        lib.UnhookWindowsHookEx(hhk);
     }
 
     public void stopKeyHook(){

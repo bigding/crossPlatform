@@ -67,6 +67,8 @@ public class DeviceMotionConvert implements Runnable {
         log4j.info("motion convert class ready to work.");
         int mouseAt = 1;   //当为1时,鼠标在服务器机;当为2时,鼠标在客户机
         int[] mousePosi = new int[2];  //存储前一刻鼠标的位置
+        int halfServerScreenWidth = serverScreenWidth/2;
+        int halfServerScreenHeight = serverScreenHeight/2;
         while (true) {
             if (!mouseMoveContainer.isEmpty()) {
                 try {
@@ -96,8 +98,8 @@ public class DeviceMotionConvert implements Runnable {
 
 
                                 //使光标位于服务器机屏幕中央
-                                mousePosi[0] = serverScreenWidth/2;
-                                mousePosi[1] = serverScreenHeight/2;
+                                mousePosi[0] = halfServerScreenWidth;
+                                mousePosi[1] = halfServerScreenHeight;
                                 log4j.info("posi1:"+mousePosi[0]+"\t"+mousePosi[1]);
                                 log4j.info("debug1:"+mouseAt+ "\t"+serverMouseX+"\t"+serverMouseY+
                                         "\t"+clientMouseX+"\t"+clientMouseY);
@@ -159,19 +161,19 @@ public class DeviceMotionConvert implements Runnable {
                                 boolean status = false;
                                 mousePosi[0] = serverMouseX;
                                 mousePosi[1] = serverMouseY;
-                                if(serverMouseX - serverScreenWidth/2 > 100){
+                                if(serverMouseX - halfServerScreenWidth > 100){
                                     mousePosi[0] = serverMouseX - 100;
                                     status = true;
                                 }
-                                else if(serverMouseX - serverScreenWidth/2 < -100){
+                                else if(serverMouseX - halfServerScreenWidth < -100){
                                     mousePosi[0] = serverMouseX + 100;
                                     status = true;
                                 }
-                                if(serverMouseY - serverScreenHeight/2 > 100){
+                                if(serverMouseY - halfServerScreenHeight > 100){
                                     mousePosi[1] = serverMouseY - 100;
                                     status = true;
                                 }
-                                else if(serverMouseY - serverScreenHeight/2 < -100){
+                                else if(serverMouseY - halfServerScreenHeight < -100){
                                     mousePosi[1] = serverMouseY + 100;
                                     status = true;
                                 }

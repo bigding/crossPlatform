@@ -17,13 +17,17 @@ public class HookControl {
         keyThread = new Thread(){
             @Override
             public void run() {
+                System.out.println("before key hook");
                 keyHook.startKeyHook();
+                System.out.println("after key hook");
             }
         };
         mouseThread = new Thread(){
             @Override
             public void run() {
+                System.out.println("before mouse hook");
                 mouseHook.startMouseHook();
+                System.out.println("after mouse hook");
             }
         };
         keyThread.start();
@@ -34,5 +38,8 @@ public class HookControl {
         keyHook.stopKeyHook();
         keyThread.interrupt();
         mouseThread.interrupt();
+    }
+    public boolean isStop(){
+        return keyThread.isAlive() || mouseThread.isAlive();
     }
 }
