@@ -69,6 +69,8 @@ public class DeviceMotionConvert implements Runnable {
         int[] mousePosi = new int[2];  //存储前一刻鼠标的位置
         int halfServerScreenWidth = serverScreenWidth/2;
         int halfServerScreenHeight = serverScreenHeight/2;
+        //启动hook
+        hookControl.startHook();
         while (true) {
             if (!mouseMoveContainer.isEmpty()) {
                 try {
@@ -85,7 +87,7 @@ public class DeviceMotionConvert implements Runnable {
                         if (mouseAt == 1) {
                             if (serverMouseX == 0) {
                                 //将部分监听权交给hook, 并将服务器机鼠标光标隐藏,禁用鼠标点击,禁用键盘输入
-                                hookControl.startHook();
+                                hookControl.disableInput();
                                 mouseAt = 2;
                                 clientMouseX = clientScreenWidth -1;
                                 clientMouseY = posiYChange(serverScreenHeight, clientScreenHeight, serverMouseY);
@@ -189,7 +191,7 @@ public class DeviceMotionConvert implements Runnable {
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
                                 //显示服务器机鼠标光标并移动到指定位置
                                 //同时回复正常监听
-                                hookControl.stopHook();
+                                hookControl.enableInput();
                                 MouseMotion.moveTo(serverMouseX, serverMouseY);
                                 //初始化客户机鼠标位置,鼠标在客户机最右侧会影响后续判断
                                 clientMouseY = 0;

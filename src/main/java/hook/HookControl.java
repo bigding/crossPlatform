@@ -33,13 +33,25 @@ public class HookControl {
         keyThread.start();
         mouseThread.start();
     }
-    public void stopHook(){
+    public void stopHook() throws InterruptedException {
         mouseHook.stopMouseHook();
         keyHook.stopKeyHook();
         keyThread.interrupt();
         mouseThread.interrupt();
+        keyThread.join();
+        mouseThread.join();
     }
     public boolean isStop(){
         return keyThread.isAlive() || mouseThread.isAlive();
+    }
+
+    public void enableInput(){
+        mouseHook.enableInput();
+        keyHook.enableInput();
+    }
+
+    public void disableInput(){
+        mouseHook.disableInput();
+        keyHook.disableInput();
     }
 }

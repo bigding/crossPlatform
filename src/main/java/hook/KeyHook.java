@@ -23,6 +23,7 @@ public class KeyHook {
     private  static Logger log4j = Logger.getLogger(KeyHook.class);
 
     private static volatile boolean quit;  //是否退出hook的标志位
+    private static volatile boolean isHook = false;   //is disable input
     private static HHOOK hhk;
     private static LowLevelKeyboardProc keyboardHook;
     final User32 lib = User32.INSTANCE;
@@ -48,28 +49,32 @@ public class KeyHook {
                 if (nCode >= 0) {
                     switch(wParam.intValue()) {
                         case WinUser.WM_KEYUP:
-                            JSONObject keyRelease = new JSONObject();
-                            keyRelease.put("id", "8");
+                            if(isHook) {
+                                JSONObject keyRelease = new JSONObject();
+                                keyRelease.put("id", "8");
 //            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
-                            keyRelease.put("keyCode", info.vkCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
-                            //按q退出 调试小后门
+                                keyRelease.put("keyCode", info.vkCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
+                                //按q退出 调试小后门
 //                            if(info.vkCode == 81){
 //                                quit = true;
 //                            }
-                            try {
-                                actionContainer.offer(keyRelease);
-                            } catch (InterruptedException e1) {
-                                log4j.error("add keyReleased event to eventContainer fail");
+                                try {
+                                    actionContainer.offer(keyRelease);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add keyReleased event to eventContainer fail");
+                                }
                             }
                             break;
                         case WinUser.WM_KEYDOWN:
-                            JSONObject keyPress = new JSONObject();
-                            keyPress.put("id", "7");
-                            keyPress.put("keyCode",info.vkCode);
-                            try {
-                                actionContainer.offer(keyPress);
-                            } catch (InterruptedException e1) {
-                                log4j.error("add keyPressed event to eventContainer fail");
+                            if(isHook) {
+                                JSONObject keyPress = new JSONObject();
+                                keyPress.put("id", "7");
+                                keyPress.put("keyCode", info.vkCode);
+                                try {
+                                    actionContainer.offer(keyPress);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add keyPressed event to eventContainer fail");
+                                }
                             }
                             break;
                         case WinUser.WM_SYSKEYUP:
@@ -81,10 +86,13 @@ public class KeyHook {
                     }
                 }
 
-//                Pointer ptr = info.getPointer();
-//                long peer = Pointer.nativeValue(ptr);
-//                return lib.CallNextHookEx(hhk, nCode, wParam, new LPARAM(peer));
-                return new LRESULT(flag);
+                if(!isHook) {
+                    Pointer ptr = info.getPointer();
+                    long peer = Pointer.nativeValue(ptr);
+                    return lib.CallNextHookEx(hhk, nCode, wParam, new LPARAM(peer));
+                }
+                else
+                    return new LRESULT(flag);
             }
         };
         hhk = lib.SetWindowsHookEx(WinUser.WH_KEYBOARD_LL, keyboardHook, hMod, 0);
@@ -102,23 +110,32 @@ public class KeyHook {
         }.start();
 
         // This bit never returns from GetMessage
-        int result;
+        boolean result;
         MSG msg = new MSG();
-        while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
-            if (result == -1) {
-                log4j.error("error when get key message.");
-                break;
-            }
-            else {
-                log4j.info("get key message.");
-                lib.TranslateMessage(msg);
-                lib.DispatchMessage(msg);
+        while (!quit) {
+            while ((result = lib.PeekMessage(msg, null, 0, 0, 1)) != false) {
+                if (result == true) {
+                    log4j.error("error when get key message.");
+                    break;
+                } else {
+                    log4j.info("get key message.");
+                    lib.TranslateMessage(msg);
+                    lib.DispatchMessage(msg);
+                }
             }
         }
-//        lib.UnhookWindowsHookEx(hhk);
     }
 
     public void stopKeyHook(){
         quit = true;
+    }
+
+
+    public void enableInput(){
+        isHook = false;
+    }
+
+    public void disableInput(){
+        isHook = true;
     }
 }
