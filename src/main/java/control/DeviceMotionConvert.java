@@ -69,6 +69,8 @@ public class DeviceMotionConvert implements Runnable {
         int[] mousePosi = new int[2];  //存储前一刻鼠标的位置
         int halfServerScreenWidth = serverScreenWidth/2;
         int halfServerScreenHeight = serverScreenHeight/2;
+
+        MouseMotion mouseMotion = MouseMotion.getInstance();
         //启动hook
         hookControl.startHook();
         while (true) {
@@ -105,7 +107,7 @@ public class DeviceMotionConvert implements Runnable {
                                 log4j.info("posi1:"+mousePosi[0]+"\t"+mousePosi[1]);
                                 log4j.info("debug1:"+mouseAt+ "\t"+serverMouseX+"\t"+serverMouseY+
                                         "\t"+clientMouseX+"\t"+clientMouseY);
-                                MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
+                                mouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                         }
                         //鼠标的光标在客户机时,处理鼠标移动信息和到达边缘时光标所在处的变换
@@ -180,7 +182,7 @@ public class DeviceMotionConvert implements Runnable {
                                     status = true;
                                 }
                                 if(status){
-                                    MouseMotion.moveTo(mousePosi[0], mousePosi[1]);
+                                    mouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                                 }
                             }
                             //鼠标到达客户端的最右端,鼠标移交给服务器机
@@ -192,7 +194,7 @@ public class DeviceMotionConvert implements Runnable {
                                 //显示服务器机鼠标光标并移动到指定位置
                                 //同时回复正常监听
                                 hookControl.enableInput();
-                                MouseMotion.moveTo(serverMouseX, serverMouseY);
+                                mouseMotion.moveTo(serverMouseX, serverMouseY);
                                 //初始化客户机鼠标位置,鼠标在客户机最右侧会影响后续判断
                                 clientMouseY = 0;
                                 clientMouseX = 0;

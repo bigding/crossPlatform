@@ -55,7 +55,6 @@ public class MouseHook {
         hookListener = new MouseHookListener() {
             //回调监听
             public LRESULT callback(int nCode, WPARAM wParam, MouseHookStruct lParam) {
-                System.out.println("in mouse");
                 lib = User32.INSTANCE;
                 long flag = 1;
                 if (nCode >= 0) {

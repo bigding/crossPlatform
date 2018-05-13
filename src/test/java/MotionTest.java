@@ -8,6 +8,6 @@ import java.awt.event.KeyEvent;
 public class MotionTest {
 
     public static void main(String[] args) {
-        MouseMotion.moveTo(0, 0);
+//        MouseMotion.moveTo(0, 0);
     }
 }

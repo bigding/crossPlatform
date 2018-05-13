@@ -2,6 +2,7 @@ package motionSimulation;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.Platform;
 import common.Shell;
 import common.SystemInfo;
 
@@ -10,13 +11,27 @@ import common.SystemInfo;
  */
 public class MouseMotion {
 
+    private static  MouseMotion mouseMotion = null;
+
     SystemInfo systemInfo;
     /**
      * osType:0为windows 1为linux 2未定义
      */
-    static int osType;
+    public int osType;
 
-    public MouseMotion() {
+    public static  MouseMotion getInstance(){
+        if(mouseMotion == null){
+            synchronized(MouseMotion.class){
+                if(mouseMotion == null){
+                    mouseMotion = new MouseMotion();
+                }
+            }
+            return mouseMotion;
+        }
+        return mouseMotion;
+    }
+
+    private MouseMotion() {
         systemInfo = SystemInfo.getInstance();
         String osName = systemInfo.getOsName();
         if (osName.toLowerCase().contains("windows")) {
@@ -29,6 +44,9 @@ public class MouseMotion {
     }
 
     public interface Mouse extends Library {
+//        Mouse INSTANCE = (Mouse) Native.loadLibrary(
+//                (Platform.isWindows() ? "msvcrt" : "c"),
+//                Mouse.class);
         Mouse INSTANCE = (Mouse) Native.loadLibrary("lib/x64/Mouse", Mouse.class);
 
         public void mouseUp();
@@ -59,7 +77,7 @@ public class MouseMotion {
     }
     
 
-    public static void up() {
+    public synchronized void up() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseUp();
         }
@@ -71,7 +89,7 @@ public class MouseMotion {
         }
     }
 
-    public static void down() {
+    public synchronized void down() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseDown();
         }
@@ -83,7 +101,7 @@ public class MouseMotion {
         }
     }
 
-    public static void left() {
+    public synchronized void left() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseLeft();
         }
@@ -95,7 +113,7 @@ public class MouseMotion {
         }
     }
 
-    public static void right() {
+    public synchronized void right() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseRight();
         }
@@ -108,7 +126,7 @@ public class MouseMotion {
         }
     }
 
-    public static void moveTo(int horizontal, int vertical) {
+    public synchronized void moveTo(int horizontal, int vertical) {
         if (osType == 0) {
             Mouse.INSTANCE.mouseMoveTo(horizontal, vertical);
         }
@@ -120,7 +138,7 @@ public class MouseMotion {
         }
     }
 
-    public static void moveBy(int horizontal, int vertical) {
+    public synchronized void moveBy(int horizontal, int vertical) {
         if (osType == 0) {
             Mouse.INSTANCE.mouseMoveBy(horizontal, vertical);
         }
@@ -138,7 +156,7 @@ public class MouseMotion {
         }
     }
 
-    public static void leftDown() {
+    public synchronized void leftDown() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseLeftDown();
         }
@@ -150,7 +168,7 @@ public class MouseMotion {
         }
     }
 
-    public static void leftUp() {
+    public synchronized void leftUp() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseLeftUp();
         }
@@ -162,7 +180,7 @@ public class MouseMotion {
         }
     }
 
-    public static void rightDown() {
+    public synchronized void rightDown() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseRightDown();
         }
@@ -174,7 +192,7 @@ public class MouseMotion {
         }
     }
 
-    public static void rightUp() {
+    public synchronized void rightUp() {
         if (osType == 0) {
             Mouse.INSTANCE.mouseRightUp();
         }
@@ -186,7 +204,7 @@ public class MouseMotion {
         }
     }
 
-    public static void middleDown() {
+    public synchronized void middleDown() {
         if(osType == 0) {
             Mouse.INSTANCE.mouseMiddleDown();
         }
@@ -199,7 +217,7 @@ public class MouseMotion {
         }
     }
 
-    public static void middleUp() {
+    public synchronized void middleUp() {
         if(osType == 0) {
             Mouse.INSTANCE.mouseMiddleUp();
         }
@@ -212,7 +230,7 @@ public class MouseMotion {
         }
     }
 
-    public static void wheelRotate(int distance) {
+    public synchronized void wheelRotate(int distance) {
         if(osType == 0) {
             Mouse.INSTANCE.mouseWheelRotate(distance);
         }

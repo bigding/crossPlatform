@@ -26,6 +26,8 @@ class ClientReadHandlerThread implements Runnable{
     @Override
     public void run() {
         BufferedReader in = null;
+        MouseMotion mouseMotion = MouseMotion.getInstance();
+        KeyboardMotion keyboardMotion = KeyboardMotion.getInstance();
         try {
             while(true){
                 //读取服务器端传来的数据
@@ -48,31 +50,31 @@ class ClientReadHandlerThread implements Runnable{
                 log4j.info("server: " + action);
                 if("2".equals(action.getString("id"))){
                     if("1".equals(action.getString("press"))){
-                        MouseMotion.leftDown();
+                        mouseMotion.leftDown();
                     }
                     else{
-                        MouseMotion.rightDown();
+                        mouseMotion.rightDown();
                     }
                 }
                 else if("3".equals(action.getString("id"))){
                     if("1".equals(action.getString("release"))){
-                        MouseMotion.leftUp();
+                        mouseMotion.leftUp();
                     }
                     else{
-                        MouseMotion.rightUp();
+                        mouseMotion.rightUp();
                     }
                 }
                 else if("6".equals(action.getString("id"))){
-                    MouseMotion.wheelRotate((int)action.get("wheelRotation"));
+                    mouseMotion.wheelRotate((int)action.get("wheelRotation"));
                 }
                 else if("7".equals(action.getString("id"))){
-                    KeyboardMotion.keyDown((int)action.get("keyCode"));
+                    keyboardMotion.keyDown((int)action.get("keyCode"));
                 }
                 else if("8".equals(action.getString("id"))){
-                    KeyboardMotion.keyUp((int)action.get("keyCode"));
+                    keyboardMotion.keyUp((int)action.get("keyCode"));
                 }
                 else if("to".equals(action.getString("id"))){
-                    MouseMotion.moveTo((int)action.get("posiX"),(int)action.get("posiY"));
+                    mouseMotion.moveTo((int)action.get("posiX"),(int)action.get("posiY"));
                 }
                 else{
                     log4j.warn("meaningless motion:"+action);

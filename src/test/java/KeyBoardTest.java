@@ -10,8 +10,8 @@ public class KeyBoardTest {
 //        KeyboardMotion.keyUp(KeyEvent.VK_CONTROL);
 //
 
-        KeyboardMotion.keyDown(192);
-        KeyboardMotion.keyUp(192);
+//        KeyboardMotion.keyDown(192);
+//        KeyboardMotion.keyUp(192);
 
     }
 }

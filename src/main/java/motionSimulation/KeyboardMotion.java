@@ -10,13 +10,27 @@ import common.SystemInfo;
  */
 public class KeyboardMotion {
 
+    private static  KeyboardMotion keyboardMotion = null;
+
     SystemInfo systemInfo;
     /**
      * osType:0为windows 1为linux 2未定义
      */
-    static int osType;
+    private int osType;
 
-    public KeyboardMotion() {
+    public static  KeyboardMotion getInstance() {
+        if(keyboardMotion == null){
+            synchronized(KeyboardMotion.class){
+                if(keyboardMotion == null){
+                    keyboardMotion =  new KeyboardMotion();
+                }
+            }
+            return keyboardMotion;
+        }
+        return keyboardMotion;
+    }
+
+    private KeyboardMotion() {
         systemInfo = SystemInfo.getInstance();
         String osName = systemInfo.getOsName();
         if (osName.toLowerCase().contains("windows")) {
@@ -33,11 +47,11 @@ public class KeyboardMotion {
         public void keyDown(int a);
         public void keyUp(int a);
     }
-    public static void keyDown(int a){
-        if(osType == 1) {
+    public synchronized void keyDown(int a){
+        if(osType == 0) {
             KeyBoard.INSTANCE.keyDown(a);
         }
-        else if(osType == 0){
+        else if(osType == 1){
             String shellStr = "xdotool keydown "+a;
             Shell.callShell(shellStr);
         }
@@ -45,11 +59,11 @@ public class KeyboardMotion {
 
         }
     }
-    public static void keyUp(int a){
-        if(osType == 1) {
+    public synchronized void keyUp(int a){
+        if(osType == 0) {
             KeyBoard.INSTANCE.keyUp(a);
         }
-        else if(osType == 0){
+        else if(osType == 1){
             String shellStr = "xdotool keyup "+a;
             Shell.callShell(shellStr);
         }
