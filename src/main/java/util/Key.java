@@ -9,22 +9,6 @@ import java.awt.event.KeyEvent;
  */
 public class Key {
 
-    public static final int VK_SLEEP = 0x5F;
-    public static final int VK_SELECT = 0x29;
-    public static final int VK_MEDIA_PREV_TRACK = 0xB1;
-    public static final int VK_MEDIA_NEXT_TRACK = 0xB0;
-    public static final int VK_VOLUME_MUTE = 0xAD;
-    public static final int VK_PLAY = 0xFA;
-    public static final int VK_VOLUME_DOWN = 0xAE;
-    public static final int VK_VOLUME_UP = 0xAF;
-    public static final int VK_BROWSER_HOME = 0xAC;
-    public static final int VK_BROWSER_SEARCH = 0xAA;
-    public static final int VK_BROWSER_FAVORITES = 0xAB;
-    public static final int VK_BROWSER_REFRESH = 0xA8;
-    public static final int VK_BROWSER_FORWARD = 0xA7;
-    public static final int VK_BROWSER_BACK = 0xA6;
-    public static final int VK_LAUNCH_MAIL = 0xB4;
-
     /**
      * 在KeyEvent中存在值  那就直接返回对应值
      * 如果KeyEvent不存在,那就自己定义手册中值返回
@@ -33,319 +17,390 @@ public class Key {
      * @param var0
      * @return
      */
-    public static int getKeyText(int var0) {
+    public static String linuxGetKeyCode(int var0) {
+        String reStr = "";
         switch(var0) {
             case 0:
-                return KeyEvent.CHAR_UNDEFINED;
+                break;
             case 1:
-                return KeyEvent.VK_ESCAPE;
+                break;
             case 2:
-                return KeyEvent.VK_1;
+                break;
             case 3:
-                return KeyEvent.VK_2;
+                break;
             case 4:
-                return KeyEvent.VK_3;
+                break;
             case 5:
-                return KeyEvent.VK_4;
+                break;
             case 6:
-                return KeyEvent.VK_5;
+                break;
             case 7:
-                return KeyEvent.VK_6;
+                break;
             case 8:
-                return KeyEvent.VK_7;
+                reStr = "0xff08";   //backspace
+                break;
             case 9:
-                return KeyEvent.VK_8;
+                reStr = "0xff09";   //tab
+                break;
             case 10:
-                return KeyEvent.VK_9;
+                break;
             case 11:
-                return KeyEvent.VK_0;
+                break;
             case 12:
-                return KeyEvent.VK_MINUS;
+                break;
             case 13:
-                return KeyEvent.VK_EQUALS;
+                reStr = "0xff0d";   //enter
+                break;
             case 14:
-                return KeyEvent.VK_BACK_SPACE;
+                break;
             case 15:
-                return KeyEvent.VK_TAB;
+                break;
             case 16:
-                return KeyEvent.VK_Q;
+                break;
             case 17:
-                return KeyEvent.VK_W;
+                break;
             case 18:
-                return KeyEvent.VK_E;
+                break;
             case 19:
-                return KeyEvent.VK_R;
+                break;
             case 20:
-                return KeyEvent.VK_T;
+                reStr = "0xffe5";   //caps lock
+                break;
             case 21:
-                return KeyEvent.VK_Y;
+                break;
             case 22:
-                return KeyEvent.VK_U;
+                break;
             case 23:
-                return KeyEvent.VK_I;
+                break;
             case 24:
-                return KeyEvent.VK_O;
+                break;
             case 25:
-                return KeyEvent.VK_P;
+                break;
             case 26:
-                return KeyEvent.VK_OPEN_BRACKET;
+                break;
             case 27:
-                return KeyEvent.VK_CLOSE_BRACKET;
+                reStr = "0xff1b";   //escape
+                break;
             case 28:
-                return KeyEvent.VK_ENTER;
+                break;
             case 29:
-                return KeyEvent.VK_CONTROL;
+                break;
             case 30:
-                return KeyEvent.VK_A;
+                break;
             case 31:
-                return KeyEvent.VK_S;
+                break;
             case 32:
-                return KeyEvent.VK_D;
+                reStr = "0x0020";   //space
+                break;
             case 33:
-                return KeyEvent.VK_F;
+                reStr = "0xff55";   //page up
+                break;
             case 34:
-                return KeyEvent.VK_G;
+                reStr = "0xff56";   //page down
+                break;
             case 35:
-                return KeyEvent.VK_H;
+                reStr = "0xff57"; //end
+                break;
             case 36:
-                return KeyEvent.VK_J;
+                reStr = "0xff50";   //home
+                break;
             case 37:
-                return KeyEvent.VK_K;
+                reStr = "0xff51";  // left arrow
+                break;
             case 38:
-                return KeyEvent.VK_L;
+                reStr = "0xff52";   //up arrow
+                break;
             case 39:
-                return KeyEvent.VK_SEMICOLON ;
+                reStr = "0xff53";   //right arrow
+                break;
             case 40:
-                return KeyEvent.VK_QUOTE ;
+                reStr = "0xff54";   //down arrow
+                break;
             case 41:
-                return KeyEvent.VK_BACK_QUOTE;
+                break;
             case 42:
-                return KeyEvent.VK_SHIFT;
+                break;
             case 43:
-                return KeyEvent.VK_BACK_SLASH;
+                break;
             case 44:
-                return KeyEvent.VK_Z;
+                reStr = "0xff61";  //print
+                break;
             case 45:
-                return KeyEvent.VK_X;
+                reStr = "0xff63";   //insert
+                break;
             case 46:
-                return KeyEvent.VK_C;
+                reStr = "0xffff";   //delete
+                break;
             case 47:
-                return KeyEvent.VK_V;
+                break;
             case 48:
-                return KeyEvent.VK_B;
+                reStr = "0x0030";
+                break;
             case 49:
-                return KeyEvent.VK_N;
+                reStr = "0x0031";
+                break;
             case 50:
-                return KeyEvent.VK_M;
+                reStr = "0x0032";
+                break;
             case 51:
-                return KeyEvent.VK_COMMA;
+                reStr = "0x0033";
+                break;
             case 52:
-                return KeyEvent.VK_PERIOD;
+                reStr = "0x0034";
+                break;
             case 53:
-                return KeyEvent.VK_SLASH;
+                reStr = "0x0035";
+                break;
+            case 54:
+                reStr = "0x0036";
+                break;
+            case 55:
+                reStr = "0x0037";
+                break;
             case 56:
-                return KeyEvent.VK_CONTEXT_MENU;
+                reStr = "0x0038";
+                break;
             case 57:
-                return KeyEvent.VK_SPACE;
+                reStr = "0x0039";
+                break;
             case 58:
-                return KeyEvent.VK_CAPS_LOCK;
+                break;
             case 59:
-                return KeyEvent.VK_F1;
+                break;
             case 60:
-                return KeyEvent.VK_F2;
+                break;
             case 61:
-                return KeyEvent.VK_F3;
+                break;
             case 62:
-                return KeyEvent.VK_F4;
+                break;
             case 63:
-                return KeyEvent.VK_F5;
+                break;
             case 64:
-                return KeyEvent.VK_F6;
+                break;
             case 65:
-                return KeyEvent.VK_F7;
+                reStr = "0x0061";  //a
+                break;
             case 66:
-                return KeyEvent.VK_F8;
+                reStr = "0x0062";
+                break;
             case 67:
-                return KeyEvent.VK_F9;
+                reStr = "0x0063";
+                break;
             case 68:
-                return KeyEvent.VK_F10;
+                reStr = "0x0064";
+                break;
             case 69:
-                return KeyEvent.VK_NUM_LOCK;
+                reStr = "0x0065";
+                break;
             case 70:
-                return KeyEvent.VK_SCROLL_LOCK;
+                reStr = "0x0066";
+                break;
+            case 71:
+                reStr = "0x0067";
+                break;
+            case 72:
+                reStr = "0x0068";
+                break;
+            case 73:
+                reStr = "0x0069";
+                break;
+            case 74:
+                reStr = "0x006a";
+                break;
+            case 75:
+                reStr = "0x006b";
+                break;
+            case 76:
+                reStr = "0x006c";
+                break;
+            case 77:
+                reStr = "0x006d";
+                break;
+            case 78:
+                reStr = "0x006e";
+                break;
+            case 79:
+                reStr = "0x006f";
+                break;
+            case 80:
+                reStr = "0x0070";
+                break;
+            case 81:
+                reStr = "0x0071";
+                break;
+            case 82:
+                reStr = "0x0072";
+                break;
             case 83:
-//                return Toolkit.getProperty("AWT.separator", "NumPad ,");
-                return -1;
+                reStr = "0x0073";
+                break;
+            case 84:
+                reStr = "0x0074";
+                break;
+            case 85:
+                reStr = "0x0075";
+                break;
+            case 86:
+                reStr = "0x0076";
+                break;
             case 87:
-                return KeyEvent.VK_F11;
+                reStr = "0x0077";
+                break;
             case 88:
-                return KeyEvent.VK_F12;
+                reStr = "0x0078";
+                break;
+            case 89:
+                reStr = "0x0079";
+                break;
+            case 90:
+                reStr = "0x007a";  //z
+                break;
             case 91:
-                return KeyEvent.VK_F13;
+                reStr = "0xff67";    //menu  windows键
+                break;
             case 92:
-                return KeyEvent.VK_F14;
+                break;
             case 93:
-                return KeyEvent.VK_F15;
+                break;
+            case 94:
+                break;
+            case 95:
+                break;
+            case 96:
+                break;
+            case 97:
+                break;
+            case 98:
+                break;
             case 99:
-                return KeyEvent.VK_F16;
+                break;
             case 100:
-                return KeyEvent.VK_F17;
+                break;
             case 101:
-                return KeyEvent.VK_F18;
+                break;
             case 102:
-                return KeyEvent.VK_F19;
+                break;
             case 103:
-                return KeyEvent.VK_F20;
+                break;
             case 104:
-                return KeyEvent.VK_F21;
+                break;
             case 105:
-                return KeyEvent.VK_F22;
+                break;
             case 106:
-                return KeyEvent.VK_F23;
+                break;
             case 107:
-                return KeyEvent.VK_F24;
+                break;
+            case 108:
+                break;
+            case 109:
+                break;
+            case 110:
+                break;
+            case 111:
+                break;
             case 112:
-                return KeyEvent.VK_KATAKANA;
+                reStr = "0xffbe";   //F1
+                break;
+            case 113:
+                reStr = "0xffbf";
+                break;
+            case 114:
+                reStr = "0xffc0";
+                break;
             case 115:
-                return KeyEvent.VK_UNDERSCORE;
+                reStr = "0xffc1";
+                break;
+            case 116:
+                reStr = "0xffc2";
+                break;
+            case 117:
+                reStr = "0xffc3";
+                break;
+            case 118:
+                reStr = "0xffc4";
+                break;
             case 119:
-//                return Toolkit.getProperty("AWT.furigana", "Furigana");
-                return -1;
+                reStr = "0xffc5";
+                break;
+            case 120:
+                reStr = "0xffc6";
+                break;
             case 121:
-                return KeyEvent.VK_KANJI;
+                reStr = "0xffc7";
+                break;
+            case 122:
+                reStr = "0xffc8";
+                break;
             case 123:
-                return KeyEvent.VK_HIRAGANA;
+                reStr = "0xffc9";   //F12
+                break;
+            case 124:
+                break;
             case 125:
-//                return Toolkit.getProperty("AWT.yen", Character.toString('¥'));
-                return -1;
-            case 3639:
-                return KeyEvent.VK_COMMA;
-            case 3653:
-                return KeyEvent.VK_PAUSE;
-            case 3655:
-                return KeyEvent.VK_HOME;
-            case 3657:
-                return KeyEvent.VK_PAGE_UP;
-            case 3663:
-                return KeyEvent.VK_END;
-            case 3665:
-                return KeyEvent.VK_PAGE_DOWN ;
-            case 3666:
-                return KeyEvent.VK_INSERT;
-            case 3667:
-                return KeyEvent.VK_DELETE;
-            case 3675:
-                return KeyEvent.VK_META;
-            case 3677:
-                return KeyEvent.VK_CONTEXT_MENU;
-            case 57360:
-//                return Toolkit.getProperty("AWT.previous", "Previous");
-                return VK_MEDIA_PREV_TRACK;
-            case 57369:
-//                return Toolkit.getProperty("AWT.next", "Next");
-                return VK_MEDIA_NEXT_TRACK;
-            case 57376:
-//                return Toolkit.getProperty("AWT.mute", "Mute");
-                return VK_VOLUME_MUTE;
-            case 57377:
-//                return Toolkit.getProperty("AWT.app_calculator", "App Calculator");
-                return -1;
-            case 57378:
-//                return Toolkit.getProperty("AWT.play", "Play");
-                return VK_PLAY;
-            case 57380:
-                return KeyEvent.VK_STOP;
-            case 57388:
-//                return Toolkit.getProperty("AWT.eject", "Eject");
-                return -1;
-            case 57390:
-//                return Toolkit.getProperty("AWT.voldn", "Volume Down");
-                return VK_VOLUME_DOWN;
-            case 57392:
-//                return Toolkit.getProperty("AWT.volup", "Volume Up");
-                return VK_VOLUME_UP;
-            case 57394:
-//                return Toolkit.getProperty("AWT.homepage", "Browser Home");
-                return VK_BROWSER_HOME;
-            case 57404:
-//                return Toolkit.getProperty("AWT.app_music", "App Music");
-                return -1;
-            case 57416:
-                return KeyEvent.VK_UP;
-            case 57419:
-                return KeyEvent.VK_LEFT;
-            case 57420:
-                return KeyEvent.VK_CLEAR;
-            case 57421:
-                return KeyEvent.VK_RIGHT;
-            case 57424:
-                return KeyEvent.VK_DOWN;
-            case 57438:
-//                return Toolkit.getProperty("AWT.power", "Power");
-                return -1;
-            case 57439:
-                return VK_SLEEP;
-            case 57443:
-//                return Toolkit.getProperty("AWT.wake", "Wake");
-                return -1;
-            case 57444:
-//                return Toolkit.getProperty("AWT.app_pictures", "App Pictures");
-                return -1;
-            case 57445:
-//                return Toolkit.getProperty("AWT.search", "Browser Search");
-                return VK_BROWSER_SEARCH;
-            case 57446:
-//                return Toolkit.getProperty("AWT.favorites", "Browser Favorites");
-                return VK_BROWSER_FAVORITES;
-            case 57447:
-//                return Toolkit.getProperty("AWT.refresh", "Browser Refresh");
-                return VK_BROWSER_REFRESH;
-            case 57448:
-                return KeyEvent.VK_STOP;
-            case 57449:
-//                return Toolkit.getProperty("AWT.forward", "Browser Forward");
-                return VK_BROWSER_FORWARD;
-            case 57450:
-//                return Toolkit.getProperty("AWT.back", "Browser Back");
-                return VK_BROWSER_BACK;
-            case 57452:
-//                return Toolkit.getProperty("AWT.app_mail", "App Mail");
-                return VK_LAUNCH_MAIL;
-            case 57453:
-                return VK_SELECT;
-            case 65396:
-//                return Toolkit.getProperty("AWT.sun_open", "Sun Open");
-                return -1;
-            case 65397:
-//                return Toolkit.getProperty("AWT.sun_help", "Sun Help");
-                return -1;
-            case 65398:
-//                return Toolkit.getProperty("AWT.sun_props", "Sun Props");
-                return -1;
-            case 65399:
-//                return Toolkit.getProperty("AWT.sun_front", "Sun Front");
-                return -1;
-            case 65400:
-//                return Toolkit.getProperty("AWT.sun_stop", "Sun Stop");
-                return -1;
-            case 65401:
-//                return Toolkit.getProperty("AWT.sun_again", "Sun Again");
-                return -1;
-            case 65403:
-//                return Toolkit.getProperty("AWT.sun_cut", "Sun Cut");
-                return -1;
-            case 65404:
-//                return Toolkit.getProperty("AWT.sun_copy", "Sun Copy");
-                return -1;
-            case 65405:
-//                return Toolkit.getProperty("AWT.sun_insert", "Sun Insert");
-                return -1;
-            case 65406:
-//                return Toolkit.getProperty("AWT.sun_find", "Sun Find");
-                return -1;
-            default:
-//                return Toolkit.getProperty("AWT.unknown", "Unknown") + " keyCode: 0x" + Integer.toString(var0, 16);
-                return -1;
+                break;
+            case 126:
+                break;
+            case 127:
+                break;
+            case 128:
+                break;
+            case 129:
+                break;
+            case 130:
+                break;
+
+
+            case 160:
+                reStr = "0xffe1";    //left shift
+                break;
+            case 161:
+                reStr = "0xffe2";    //right shift
+                break;
+            case 162:
+                reStr = "0xffe3";    //left ctrl
+                break;
+            case 163:
+                reStr = "0xffe4";   //right ctrl
+                break;
+
+
+            case 186:
+                reStr = "0x0026";   //ampersand  ；
+                break;
+            case 187:
+                reStr = "0x003d";   //equals
+                break;
+            case 188:
+                reStr = "0x002c";   // comma  ,
+                break;
+            case 189:
+                reStr = "0x00ad";   //hyphen  -  短横线
+                break;
+            case 190:
+                reStr = "0x002e";   //period  .
+                break;
+            case 191:
+                reStr = "0x002f";   //slash  /
+                break;
+            case 192:
+                reStr = "0x0060";   //grave  `
+                break;
+            case 193:
+                break;
+
+            case 219:
+                reStr = "0x005b";   //left bracket  [
+                break;
+            case 220:
+                reStr = "0x005c";   //backslash     \
+                break;
+            case 221:
+                reStr = "0x005d";   //right bracket  ]
+                break;
+            case 222:
+                reStr = "0x0027";   //puote   '
+                break;
         }
+        return reStr;
     }
 }

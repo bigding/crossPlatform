@@ -31,27 +31,27 @@ public class HookControl {
             }
         };
         keyThread.start();
-        mouseThread.start();
+//        mouseThread.start();
     }
     public void stopHook() throws InterruptedException {
-        mouseHook.stopMouseHook();
+//        mouseHook.stopMouseHook();
         keyHook.stopKeyHook();
         keyThread.interrupt();
-        mouseThread.interrupt();
+//        mouseThread.interrupt();
         keyThread.join();
-        mouseThread.join();
+//        mouseThread.join();
     }
     public boolean isStop(){
         return keyThread.isAlive() || mouseThread.isAlive();
     }
 
     public void enableInput(){
-        mouseHook.enableInput();
+//        mouseHook.enableInput();
         keyHook.enableInput();
     }
 
     public void disableInput(){
-        mouseHook.disableInput();
+//        mouseHook.disableInput();
         keyHook.disableInput();
     }
 }

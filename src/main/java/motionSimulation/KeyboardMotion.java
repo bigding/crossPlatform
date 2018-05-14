@@ -4,6 +4,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import common.Shell;
 import common.SystemInfo;
+import util.Key;
 
 /**
  * 通过jni控制键盘事件
@@ -52,7 +53,8 @@ public class KeyboardMotion {
             KeyBoard.INSTANCE.keyDown(a);
         }
         else if(osType == 1){
-            String shellStr = "xdotool keydown "+a;
+            String hexStr = Key.linuxGetKeyCode(a);
+            String shellStr = "xdotool keydown 0x"+hexStr;
             Shell.callShell(shellStr);
         }
         else {
@@ -64,7 +66,8 @@ public class KeyboardMotion {
             KeyBoard.INSTANCE.keyUp(a);
         }
         else if(osType == 1){
-            String shellStr = "xdotool keyup "+a;
+            String hexStr = Key.linuxGetKeyCode(a);
+            String shellStr = "xdotool keyup 0x"+hexStr;
             Shell.callShell(shellStr);
         }
         else{

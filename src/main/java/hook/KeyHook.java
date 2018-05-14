@@ -48,33 +48,28 @@ public class KeyHook {
                 if (nCode >= 0) {
                     switch(wParam.intValue()) {
                         case WinUser.WM_KEYUP:
-                            if(isHook) {
-                                JSONObject keyRelease = new JSONObject();
-                                keyRelease.put("id", "8");
-//            keyRelease.put("keyText", NativeKeyEvent.getKeyText(e.getKeyCode()));
-                                keyRelease.put("keyCode", info.vkCode);  //  jnativehook 各个key的编码和键盘ascii码不同,需要转换一下
-                                //按q退出 调试小后门
-//                            if(info.vkCode == 81){
-//                                quit = true;
+//                            if(isHook) {
+//                                JSONObject keyRelease = new JSONObject();
+//                                keyRelease.put("id", "8");
+//                                try {
+//                                    actionContainer.offer(keyRelease);
+//                                } catch (InterruptedException e1) {
+//                                    log4j.error("add keyReleased event to eventContainer fail");
+//                                }
 //                            }
-                                try {
-                                    actionContainer.offer(keyRelease);
-                                } catch (InterruptedException e1) {
-                                    log4j.error("add keyReleased event to eventContainer fail");
-                                }
-                            }
                             break;
                         case WinUser.WM_KEYDOWN:
-                            if(isHook) {
-                                JSONObject keyPress = new JSONObject();
-                                keyPress.put("id", "7");
-                                keyPress.put("keyCode", info.vkCode);
-                                try {
-                                    actionContainer.offer(keyPress);
-                                } catch (InterruptedException e1) {
-                                    log4j.error("add keyPressed event to eventContainer fail");
-                                }
-                            }
+//                            if(isHook) {
+//                                JSONObject keyPress = new JSONObject();
+//                                keyPress.put("id", "7");
+//                                keyPress.put("keyCode", info.vkCode);
+//                                try {
+//                                    actionContainer.offer(keyPress);
+//                                } catch (InterruptedException e1) {
+//                                    log4j.error("add keyPressed event to eventContainer fail");
+//                                }
+//                            }
+                            System.out.println("keyCode:" + info.vkCode);
                             break;
                         case WinUser.WM_SYSKEYUP:
 //                            System.out.println("sysKeyUp, key=" + info.vkCode);
