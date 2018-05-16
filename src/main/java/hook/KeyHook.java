@@ -48,28 +48,28 @@ public class KeyHook {
                 if (nCode >= 0) {
                     switch(wParam.intValue()) {
                         case WinUser.WM_KEYUP:
-//                            if(isHook) {
-//                                JSONObject keyRelease = new JSONObject();
-//                                keyRelease.put("id", "8");
-//                                try {
-//                                    actionContainer.offer(keyRelease);
-//                                } catch (InterruptedException e1) {
-//                                    log4j.error("add keyReleased event to eventContainer fail");
-//                                }
-//                            }
+                            if(isHook) {
+                                JSONObject keyRelease = new JSONObject();
+                                keyRelease.put("id", "8");
+                                try {
+                                    actionContainer.offer(keyRelease);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add keyReleased event to eventContainer fail");
+                                }
+                            }
                             break;
                         case WinUser.WM_KEYDOWN:
-//                            if(isHook) {
-//                                JSONObject keyPress = new JSONObject();
-//                                keyPress.put("id", "7");
-//                                keyPress.put("keyCode", info.vkCode);
-//                                try {
-//                                    actionContainer.offer(keyPress);
-//                                } catch (InterruptedException e1) {
-//                                    log4j.error("add keyPressed event to eventContainer fail");
-//                                }
-//                            }
-                            System.out.println("keyCode:" + info.vkCode);
+                            if(isHook) {
+                                JSONObject keyPress = new JSONObject();
+                                keyPress.put("id", "7");
+                                keyPress.put("keyCode", info.vkCode);
+                                try {
+                                    actionContainer.offer(keyPress);
+                                } catch (InterruptedException e1) {
+                                    log4j.error("add keyPressed event to eventContainer fail");
+                                }
+                            }
+//                            System.out.println("keyCode:" + info.vkCode);
                             break;
                         case WinUser.WM_SYSKEYUP:
 //                            System.out.println("sysKeyUp, key=" + info.vkCode);

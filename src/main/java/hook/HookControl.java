@@ -17,41 +17,37 @@ public class HookControl {
         keyThread = new Thread(){
             @Override
             public void run() {
-                System.out.println("before key hook");
                 keyHook.startKeyHook();
-                System.out.println("after key hook");
             }
         };
         mouseThread = new Thread(){
             @Override
             public void run() {
-                System.out.println("before mouse hook");
                 mouseHook.startMouseHook();
-                System.out.println("after mouse hook");
             }
         };
         keyThread.start();
-//        mouseThread.start();
+        mouseThread.start();
     }
     public void stopHook() throws InterruptedException {
-//        mouseHook.stopMouseHook();
+        mouseHook.stopMouseHook();
         keyHook.stopKeyHook();
         keyThread.interrupt();
-//        mouseThread.interrupt();
+        mouseThread.interrupt();
         keyThread.join();
-//        mouseThread.join();
+        mouseThread.join();
     }
     public boolean isStop(){
         return keyThread.isAlive() || mouseThread.isAlive();
     }
 
     public void enableInput(){
-//        mouseHook.enableInput();
+        mouseHook.enableInput();
         keyHook.enableInput();
     }
 
     public void disableInput(){
-//        mouseHook.disableInput();
+        mouseHook.disableInput();
         keyHook.disableInput();
     }
 }

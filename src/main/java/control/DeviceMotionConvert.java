@@ -104,9 +104,9 @@ public class DeviceMotionConvert implements Runnable {
                                 //使光标位于服务器机屏幕中央
                                 mousePosi[0] = halfServerScreenWidth;
                                 mousePosi[1] = halfServerScreenHeight;
-                                log4j.info("posi1:"+mousePosi[0]+"\t"+mousePosi[1]);
-                                log4j.info("debug1:"+mouseAt+ "\t"+serverMouseX+"\t"+serverMouseY+
-                                        "\t"+clientMouseX+"\t"+clientMouseY);
+//                                log4j.info("posi1:"+mousePosi[0]+"\t"+mousePosi[1]);
+//                                log4j.info("debug1:"+mouseAt+ "\t"+serverMouseX+"\t"+serverMouseY+
+//                                        "\t"+clientMouseX+"\t"+clientMouseY);
                                 mouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                         }
@@ -118,17 +118,17 @@ public class DeviceMotionConvert implements Runnable {
 
                             //下面对x，y值的判断是为了防止绝对值超过一百的情况
                             int x = serverMouseX - mousePosi[0];
-                            if(x > 100){
+                            if(x >= 100){
                                 x -= 100;
                             }
-                            else if(x < -100){
+                            else if(x <= -100){
                                 x += 100;
                             }
                             int y = serverMouseY - mousePosi[1];
-                            if(y > 100){
+                            if(y >= 100){
                                 y -= 100;
                             }
-                            else if(y < -100){
+                            else if(y <= -100){
                                 y += 100;
                             }
 
@@ -150,9 +150,9 @@ public class DeviceMotionConvert implements Runnable {
                             if (clientMouseX > clientScreenWidth) {
                                 clientMouseX = clientScreenWidth;
                             }
-                            log4j.info("posi2:"+mousePosi[0]+"\t"+mousePosi[1]);
-                            log4j.info("debug2:"+mouseAt+"\t"+x+"\t"+y + "\t"+serverMouseX+"\t"+
-                                    serverMouseY+"\t"+clientMouseX+"\t"+clientMouseY);
+//                            log4j.info("posi2:"+mousePosi[0]+"\t"+mousePosi[1]);
+//                            log4j.info("debug2:"+mouseAt+"\t"+x+"\t"+y + "\t"+serverMouseX+"\t"+
+//                                    serverMouseY+"\t"+clientMouseX+"\t"+clientMouseY);
 
                             JSONObject jsonMouseMotion = new JSONObject();
                             jsonMouseMotion.put("id", "to");
@@ -187,7 +187,7 @@ public class DeviceMotionConvert implements Runnable {
                             }
                             //鼠标到达客户端的最右端,鼠标移交给服务器机
                             else {
-                                log4j.info("x is 1366?? "+clientMouseX+"\t"+ clientScreenWidth);
+//                                log4j.info("x is 1366?? "+clientMouseX+"\t"+ clientScreenWidth);
                                 mouseAt = 1;
                                 serverMouseX = 1;
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
