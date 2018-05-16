@@ -54,7 +54,7 @@ public class KeyboardMotion {
         }
         else if(osType == 1){
             String hexStr = Key.linuxGetKeyCode(a);
-            String shellStr = "xdotool keydown 0x"+hexStr;
+            String shellStr = "xdotool keydown "+hexStr;
             Shell.callShell(shellStr);
         }
         else {
@@ -67,7 +67,7 @@ public class KeyboardMotion {
         }
         else if(osType == 1){
             String hexStr = Key.linuxGetKeyCode(a);
-            String shellStr = "xdotool keyup 0x"+hexStr;
+            String shellStr = "xdotool keyup "+hexStr;
             Shell.callShell(shellStr);
         }
         else{

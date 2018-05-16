@@ -32,4 +32,8 @@ public class ActionContainer {
     public boolean isEmpty() {
         return queue.isEmpty();
     }
+
+    public void clean(){
+        queue.clear();
+    }
 }

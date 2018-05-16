@@ -67,8 +67,8 @@ public class DeviceMotionConvert implements Runnable {
         log4j.info("motion convert class ready to work.");
         int mouseAt = 1;   //当为1时,鼠标在服务器机;当为2时,鼠标在客户机
         int[] mousePosi = new int[2];  //存储前一刻鼠标的位置
-        int halfServerScreenWidth = serverScreenWidth/2;
-        int halfServerScreenHeight = serverScreenHeight/2;
+        int halfServerScreenWidth = serverScreenWidth / 2;
+        int halfServerScreenHeight = serverScreenHeight / 2;
 
         MouseMotion mouseMotion = MouseMotion.getInstance();
         //启动hook
@@ -91,7 +91,7 @@ public class DeviceMotionConvert implements Runnable {
                                 //将部分监听权交给hook, 并将服务器机鼠标光标隐藏,禁用鼠标点击,禁用键盘输入
                                 hookControl.disableInput();
                                 mouseAt = 2;
-                                clientMouseX = clientScreenWidth -1;
+                                clientMouseX = clientScreenWidth - 1;
                                 clientMouseY = posiYChange(serverScreenHeight, clientScreenHeight, serverMouseY);
 
                                 JSONObject jsonMouseMotion = new JSONObject();
@@ -104,55 +104,59 @@ public class DeviceMotionConvert implements Runnable {
                                 //使光标位于服务器机屏幕中央
                                 mousePosi[0] = halfServerScreenWidth;
                                 mousePosi[1] = halfServerScreenHeight;
-//                                log4j.info("posi1:"+mousePosi[0]+"\t"+mousePosi[1]);
-//                                log4j.info("debug1:"+mouseAt+ "\t"+serverMouseX+"\t"+serverMouseY+
-//                                        "\t"+clientMouseX+"\t"+clientMouseY);
+                                log4j.info("posi1:" + mousePosi[0] + "\t" + mousePosi[1]);
+                                log4j.info("debug1:" + mouseAt + "\t" + serverMouseX + "\t" + serverMouseY +
+                                        "\t" + clientMouseX + "\t" + clientMouseY);
                                 mouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                             }
                         }
                         //鼠标的光标在客户机时,处理鼠标移动信息和到达边缘时光标所在处的变换
                         else if (mouseAt == 2) {
-                            if(serverMouseX <= 0){
+                            if (serverMouseX <= 0) {
                                 continue;
                             }
 
                             //下面对x，y值的判断是为了防止绝对值超过一百的情况
                             int x = serverMouseX - mousePosi[0];
-                            if(x >= 100){
-                                x -= 100;
-                            }
-                            else if(x <= -100){
-                                x += 100;
-                            }
                             int y = serverMouseY - mousePosi[1];
-                            if(y >= 100){
-                                y -= 100;
+                            //丢弃移动的绝对值大于10px的情况
+
+                            while (x > 50 || x <= -50) {
+                                if (x > 50)
+                                    x -= 100;
+                                if (x <= -50)
+                                    x += 100;
                             }
-                            else if(y <= -100){
-                                y += 100;
+                            while (y > 50 || y <= -50){
+                                if(y > 50)
+                                    y -= 100;
+                                if(y <= -50)
+                                    y += 100;
                             }
+//                            if(x > 10 || x < -10|| y > 10 || y < -10)
+//                                continue;
 
                             clientMouseX = clientMouseX + x;
                             clientMouseY = clientMouseY + y;
                             //客户机屏幕上边缘
-                            if (clientMouseY < 0) {
+                            if (clientMouseY <= 0) {
                                 clientMouseY = 0;
                             }
                             //客户机屏幕下边缘
-                            if (clientMouseY > clientScreenHeight) {
+                            if (clientMouseY >= clientScreenHeight) {
                                 clientMouseY = clientScreenHeight;
                             }
                             //客户机屏幕左边缘
-                            if (clientMouseX < 0) {
+                            if (clientMouseX <= 0) {
                                 clientMouseX = 0;
                             }
                             //客户机屏幕右边缘
-                            if (clientMouseX > clientScreenWidth) {
+                            if (clientMouseX >= clientScreenWidth) {
                                 clientMouseX = clientScreenWidth;
                             }
-//                            log4j.info("posi2:"+mousePosi[0]+"\t"+mousePosi[1]);
-//                            log4j.info("debug2:"+mouseAt+"\t"+x+"\t"+y + "\t"+serverMouseX+"\t"+
-//                                    serverMouseY+"\t"+clientMouseX+"\t"+clientMouseY);
+                            log4j.info("posi2:" + mousePosi[0] + "\t" + mousePosi[1]);
+                            log4j.info("debug2:" + mouseAt + "\t" + x + "\t" + y + "\t" + serverMouseX + "\t" +
+                                    serverMouseY + "\t" + clientMouseX + "\t" + clientMouseY);
 
                             JSONObject jsonMouseMotion = new JSONObject();
                             jsonMouseMotion.put("id", "to");
@@ -165,36 +169,33 @@ public class DeviceMotionConvert implements Runnable {
                                 boolean status = false;
                                 mousePosi[0] = serverMouseX;
                                 mousePosi[1] = serverMouseY;
-                                if(serverMouseX - halfServerScreenWidth > 100){
+                                if (serverMouseX - halfServerScreenWidth > 100) {
                                     mousePosi[0] = serverMouseX - 100;
                                     status = true;
-                                }
-                                else if(serverMouseX - halfServerScreenWidth < -100){
+                                } else if (serverMouseX - halfServerScreenWidth < -100) {
                                     mousePosi[0] = serverMouseX + 100;
                                     status = true;
                                 }
-                                if(serverMouseY - halfServerScreenHeight > 100){
+                                if (serverMouseY - halfServerScreenHeight > 100) {
                                     mousePosi[1] = serverMouseY - 100;
                                     status = true;
-                                }
-                                else if(serverMouseY - halfServerScreenHeight < -100){
+                                } else if (serverMouseY - halfServerScreenHeight < -100) {
                                     mousePosi[1] = serverMouseY + 100;
                                     status = true;
                                 }
-                                if(status){
+                                if (status) {
                                     mouseMotion.moveTo(mousePosi[0], mousePosi[1]);
                                 }
                             }
                             //鼠标到达客户端的最右端,鼠标移交给服务器机
                             else {
-//                                log4j.info("x is 1366?? "+clientMouseX+"\t"+ clientScreenWidth);
                                 mouseAt = 1;
-                                serverMouseX = 1;
                                 serverMouseY = posiYChange(clientScreenHeight, serverScreenHeight, clientMouseY);
                                 //显示服务器机鼠标光标并移动到指定位置
                                 //同时回复正常监听
                                 hookControl.enableInput();
-                                mouseMotion.moveTo(serverMouseX, serverMouseY);
+//                                mouseMoveContainer.clean();
+                                mouseMotion.moveTo(1, serverMouseY);
                                 //初始化客户机鼠标位置,鼠标在客户机最右侧会影响后续判断
                                 clientMouseY = 0;
                                 clientMouseX = 0;

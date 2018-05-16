@@ -51,6 +51,7 @@ public class KeyHook {
                             if(isHook) {
                                 JSONObject keyRelease = new JSONObject();
                                 keyRelease.put("id", "8");
+                                keyRelease.put("keyCode", info.vkCode);
                                 try {
                                     actionContainer.offer(keyRelease);
                                 } catch (InterruptedException e1) {

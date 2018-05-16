@@ -236,11 +236,13 @@ public class MouseMotion {
         }
         else if (osType == 1) {
             if(distance > 0){
-                String shellStr = "xdotool mouseup 4";
+                String shellStr = "xdotool click 4";
+                System.out.println(shellStr);
                 Shell.callShell(shellStr);
             }
             else {
-                String shellStr = "xdotool mouseup 5";
+                String shellStr = "xdotool click 5";
+                System.out.println(shellStr);
                 Shell.callShell(shellStr);
             }
         }else{
